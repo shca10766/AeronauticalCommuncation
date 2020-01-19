@@ -1,0 +1,3 @@
+package aeronauticalcommunication;
+
+@license(LGPL);
