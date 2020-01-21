@@ -30,14 +30,6 @@ network Area {
        	int M; // distance between two BSs
     submodules:
         aircraftGenerator: AircraftGenerator;
-        for i=0..w-1, for j=0..L-1 {
-            baseStation[w*i+j]: BaseStation {
-                parameters:
-                    nBS = w*i+j;
-                    x_BS = i*M + (M/2);
-                    y_BS = j*M + (M/2);
-            }
-        }
-        
+        baseStation[w*l]: BaseStation;       
         
 }
