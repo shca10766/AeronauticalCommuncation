@@ -20,7 +20,9 @@ package aeronauticalcommunication;
 //
 simple BaseStation {
     parameters:
-        
+        int nBS;
+        int x_BS;
+        int y_BS;
     gates:
         input inBS;
         output outBS;

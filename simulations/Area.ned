@@ -23,4 +23,21 @@ import aeronauticalcommunication.ControlTower;
 // TODO auto-generated type
 //
 network Area {
+    parameters: 
+        bool scenario; // Define the scenario -> False: D/M/1 	True: M/M/1
+       	int l; // number of BS on the length
+       	int w; // number of BS on the width
+       	int M; // distance between two BSs
+    submodules:
+        aircraftGenerator: AircraftGenerator;
+        for i=0..w-1, for j=0..L-1 {
+            baseStation[w*i+j]: BaseStation {
+                parameters:
+                    nBS = w*i+j;
+                    x_BS = i*M + (M/2);
+                    y_BS = j*M + (M/2);
+            }
+        }
+        
+        
 }

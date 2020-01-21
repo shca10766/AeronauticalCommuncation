@@ -20,5 +20,5 @@ package aeronauticalcommunication;
 //
 simple AircraftGenerator {
     parameters:
-        
+        double lambda; //parameter of the interarrival time
 }
