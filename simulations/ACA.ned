@@ -16,7 +16,6 @@
 package aeronauticalcommunication.simulations;
 
 import aeronauticalcommunication.Aircraft;
-import aeronauticalcommunication.Routing;
 import aeronauticalcommunication.BaseStation;
 import aeronauticalcommunication.ControlTower;
 //
