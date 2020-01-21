@@ -1,19 +1,18 @@
-#ifndef AIRCRAFT_H_
-#define AIRCRAFT_H_
+#ifndef AIRCRAFTGENERATOR_H_
+#define AIRCRAFTGENERATOR_H_
 
 #include <omnetpp.h>
-#include "Packet_m.h"
 
 using namespace omnetpp;
 
 /**
  * TODO - Generated class
  */
-class Aircraft : public cSimpleModule {
+class AircraftGenerator : public cSimpleModule {
     private:
     protected:
         virtual void initialize();
         virtual void handleMessage(cMessage *msg);
 };
 
-#endif /* AIRCRAFT_H_ */
+#endif /* AIRCRAFTGENERATOR_H_ */

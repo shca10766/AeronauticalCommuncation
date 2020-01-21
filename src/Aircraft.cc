@@ -6,3 +6,6 @@ Define_Module(Aircraft);
 void Aircraft::initialize() {
 }
 
+void Aircraft::handleMessage(cMessage *msg) {
+
+}

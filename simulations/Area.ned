@@ -16,10 +16,11 @@
 package aeronauticalcommunication.simulations;
 
 import aeronauticalcommunication.Aircraft;
+import aeronauticalcommunication.AircraftGenerator;
 import aeronauticalcommunication.BaseStation;
 import aeronauticalcommunication.ControlTower;
 //
 // TODO auto-generated type
 //
-network ACA {
+network Area {
 }
