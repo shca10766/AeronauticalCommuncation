@@ -26,12 +26,32 @@
  * //
  * message Packet
  * {
+ *     int id_aircraft;
+ *     int id_baseStation;
+ * 
+ *     double x_aircraft;
+ *     double y_aircraft;
+ *     double distant_AC_BS;
+ * 
+ *     double departureAC_time;
+ *     double arrivalBS_time;
+ *     double departureBS_time;
+ *     double arrivalCT_time;
  * }
  * </pre>
  */
 class Packet : public ::omnetpp::cMessage
 {
   protected:
+    int id_aircraft;
+    int id_baseStation;
+    double x_aircraft;
+    double y_aircraft;
+    double distant_AC_BS;
+    double departureAC_time;
+    double arrivalBS_time;
+    double departureBS_time;
+    double arrivalCT_time;
 
   private:
     void copy(const Packet& other);
@@ -50,6 +70,24 @@ class Packet : public ::omnetpp::cMessage
     virtual void parsimUnpack(omnetpp::cCommBuffer *b) override;
 
     // field getter/setter methods
+    virtual int getId_aircraft() const;
+    virtual void setId_aircraft(int id_aircraft);
+    virtual int getId_baseStation() const;
+    virtual void setId_baseStation(int id_baseStation);
+    virtual double getX_aircraft() const;
+    virtual void setX_aircraft(double x_aircraft);
+    virtual double getY_aircraft() const;
+    virtual void setY_aircraft(double y_aircraft);
+    virtual double getDistant_AC_BS() const;
+    virtual void setDistant_AC_BS(double distant_AC_BS);
+    virtual double getDepartureAC_time() const;
+    virtual void setDepartureAC_time(double departureAC_time);
+    virtual double getArrivalBS_time() const;
+    virtual void setArrivalBS_time(double arrivalBS_time);
+    virtual double getDepartureBS_time() const;
+    virtual void setDepartureBS_time(double departureBS_time);
+    virtual double getArrivalCT_time() const;
+    virtual void setArrivalCT_time(double arrivalCT_time);
 };
 
 inline void doParsimPacking(omnetpp::cCommBuffer *b, const Packet& obj) {obj.parsimPack(b);}

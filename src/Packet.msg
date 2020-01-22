@@ -17,4 +17,15 @@
 // TODO generated message class
 //
 message Packet {
+    int id_aircraft;
+    int id_baseStation;
+    
+    double x_aircraft;
+    double y_aircraft;
+    double distant_AC_BS;
+    
+    double departureAC_time;
+    double arrivalBS_time;
+    double departureBS_time;
+    double arrivalCT_time;
 }

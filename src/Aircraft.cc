@@ -125,3 +125,7 @@ double Aircraft::distanceBS() {
     double d = sqrt(pow(xBS-x, 2) + pow(yBS-y, 2) + h*h);
     return d;
 }
+
+Packet Aircraft::generatePacket() {
+    packet = new Packet("packet");
+}
