@@ -28,6 +28,7 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
             sprintf(nbAircraft_string, "AC%d", aircraftCounter);
             const char * aircraftName = nbAircraft_string;
             cModule *aircraft = aicraftType->create(aircraftName, this->getParentModule());
+
             // set up parameter "id"
             aircraft->par("id") = aircraftCounter;
             double time = simTime().dbl();

@@ -23,7 +23,6 @@ class Aircraft : public cSimpleModule {
 
         cModule *BS_connect;
 
-        cMessage *event;
         Packet *packet;
     protected:
         virtual void initialize();
