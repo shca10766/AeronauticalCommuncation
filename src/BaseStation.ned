@@ -23,6 +23,7 @@ simple BaseStation {
         int nBS;
         int x_BS;
         int y_BS;
+        int M = default(100);
     gates:
         input inBS;
         output outBS;

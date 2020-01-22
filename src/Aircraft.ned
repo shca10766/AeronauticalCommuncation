@@ -19,8 +19,9 @@ package aeronauticalcommunication;
 // TODO auto-generated type
 //
 simple Aircraft {
-    parameters:
-        
+    parameters:  
+        //double k;     
+        //double arrival_time; 
     gates:
-        output outAircraft;
+        //output outAircraft;
 }

@@ -13,7 +13,7 @@ class ControlTower : public cSimpleModule {
     private:
     protected:
         virtual void initialize();
-        virtual void hanfleMessage(cMessage *msg);
+        virtual void handleMessage(cMessage *msg);
         virtual void finish();
 };
 

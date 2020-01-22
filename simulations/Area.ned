@@ -24,12 +24,39 @@ import aeronauticalcommunication.ControlTower;
 //
 network Area {
     parameters: 
-        bool scenario; // Define the scenario -> False: D/M/1 	True: M/M/1
-       	int l; // number of BS on the length
-       	int w; // number of BS on the width
-       	int M; // distance between two BSs
+        
     submodules:
         aircraftGenerator: AircraftGenerator;
-        baseStation[w*l]: BaseStation;       
-        
+        baseStation1: BaseStation {
+            parameters:
+                nBS = 1;
+                x_BS = 50;
+                y_BS = 50; 
+        }
+        baseStation2: BaseStation {
+            parameters:
+                nBS = 2;
+                x_BS = 150;
+                y_BS = 50; 
+        }
+        baseStation3: BaseStation {
+            parameters:
+                nBS = 3;
+                x_BS = 50;
+                y_BS = 150; 
+        }
+        baseStation4: BaseStation {
+            parameters:
+                nBS = 4;
+                x_BS = 150;
+                y_BS = 150; 
+        }
+        controlTower: ControlTower;
+        aircraft: Aircraft;
+	connections allowunconnected:
+	    baseStation1.outBS --> controlTower.inCT++;
+	    baseStation2.outBS --> controlTower.inCT++;
+	    baseStation3.outBS --> controlTower.inCT++;
+	    baseStation4.outBS --> controlTower.inCT++;
+	    
 }

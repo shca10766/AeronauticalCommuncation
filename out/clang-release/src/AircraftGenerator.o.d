@@ -1,0 +1,6 @@
+../out/clang-release/src/AircraftGenerator.o: AircraftGenerator.cc \
+  AircraftGenerator.h C:/omnetpp-5.5.1/include\omnetpp.h
+
+AircraftGenerator.h:
+
+C:/omnetpp-5.5.1/include\omnetpp.h:
