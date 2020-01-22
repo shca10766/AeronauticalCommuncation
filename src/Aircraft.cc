@@ -81,7 +81,6 @@ void Aircraft::initialize() {
     }
 
     connectionBS();
-    distanceBS();
 
     //event = new cMessage("event");
     //packet = new Packet();
@@ -114,7 +113,16 @@ void Aircraft::connectionBS() {
     }
 }
 
-double Aircraft::distanceBS() {
+void Aircraft::generatePacket() {
+    packet = new Packet("packet");
+
+    packet -> setId_aircraft(par("id"));
+    packet -> setId_baseStation(BS_connect -> par("nBS").intValue());
+
+    distanceBS();
+}
+
+void Aircraft::distanceBS() {
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     double x = (v*simTime().dbl()*a)/(sqrt(1+a*a)) + x_arrival;
     double y = y_arrival + (v*simTime().dbl())/(sqrt(1+a*a));
@@ -123,9 +131,8 @@ double Aircraft::distanceBS() {
     int yBS = BS_connect -> par("y_BS").intValue();
 
     double d = sqrt(pow(xBS-x, 2) + pow(yBS-y, 2) + h*h);
-    return d;
-}
 
-Packet Aircraft::generatePacket() {
-    packet = new Packet("packet");
+    packet -> setX_aircraft(x);
+    packet -> setY_aircraft(y);
+    packet -> setDistance_AC_BS(d);
 }

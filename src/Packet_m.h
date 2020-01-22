@@ -31,7 +31,7 @@
  * 
  *     double x_aircraft;
  *     double y_aircraft;
- *     double distant_AC_BS;
+ *     double distance_AC_BS;
  * 
  *     double departureAC_time;
  *     double arrivalBS_time;
@@ -47,7 +47,7 @@ class Packet : public ::omnetpp::cMessage
     int id_baseStation;
     double x_aircraft;
     double y_aircraft;
-    double distant_AC_BS;
+    double distance_AC_BS;
     double departureAC_time;
     double arrivalBS_time;
     double departureBS_time;
@@ -78,8 +78,8 @@ class Packet : public ::omnetpp::cMessage
     virtual void setX_aircraft(double x_aircraft);
     virtual double getY_aircraft() const;
     virtual void setY_aircraft(double y_aircraft);
-    virtual double getDistant_AC_BS() const;
-    virtual void setDistant_AC_BS(double distant_AC_BS);
+    virtual double getDistance_AC_BS() const;
+    virtual void setDistance_AC_BS(double distance_AC_BS);
     virtual double getDepartureAC_time() const;
     virtual void setDepartureAC_time(double departureAC_time);
     virtual double getArrivalBS_time() const;

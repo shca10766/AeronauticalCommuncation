@@ -22,7 +22,7 @@ message Packet {
     
     double x_aircraft;
     double y_aircraft;
-    double distant_AC_BS;
+    double distance_AC_BS;
     
     double departureAC_time;
     double arrivalBS_time;

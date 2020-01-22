@@ -185,7 +185,7 @@ Packet::Packet(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
     this->id_baseStation = 0;
     this->x_aircraft = 0;
     this->y_aircraft = 0;
-    this->distant_AC_BS = 0;
+    this->distance_AC_BS = 0;
     this->departureAC_time = 0;
     this->arrivalBS_time = 0;
     this->departureBS_time = 0;
@@ -215,7 +215,7 @@ void Packet::copy(const Packet& other)
     this->id_baseStation = other.id_baseStation;
     this->x_aircraft = other.x_aircraft;
     this->y_aircraft = other.y_aircraft;
-    this->distant_AC_BS = other.distant_AC_BS;
+    this->distance_AC_BS = other.distance_AC_BS;
     this->departureAC_time = other.departureAC_time;
     this->arrivalBS_time = other.arrivalBS_time;
     this->departureBS_time = other.departureBS_time;
@@ -229,7 +229,7 @@ void Packet::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->id_baseStation);
     doParsimPacking(b,this->x_aircraft);
     doParsimPacking(b,this->y_aircraft);
-    doParsimPacking(b,this->distant_AC_BS);
+    doParsimPacking(b,this->distance_AC_BS);
     doParsimPacking(b,this->departureAC_time);
     doParsimPacking(b,this->arrivalBS_time);
     doParsimPacking(b,this->departureBS_time);
@@ -243,7 +243,7 @@ void Packet::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->id_baseStation);
     doParsimUnpacking(b,this->x_aircraft);
     doParsimUnpacking(b,this->y_aircraft);
-    doParsimUnpacking(b,this->distant_AC_BS);
+    doParsimUnpacking(b,this->distance_AC_BS);
     doParsimUnpacking(b,this->departureAC_time);
     doParsimUnpacking(b,this->arrivalBS_time);
     doParsimUnpacking(b,this->departureBS_time);
@@ -290,14 +290,14 @@ void Packet::setY_aircraft(double y_aircraft)
     this->y_aircraft = y_aircraft;
 }
 
-double Packet::getDistant_AC_BS() const
+double Packet::getDistance_AC_BS() const
 {
-    return this->distant_AC_BS;
+    return this->distance_AC_BS;
 }
 
-void Packet::setDistant_AC_BS(double distant_AC_BS)
+void Packet::setDistance_AC_BS(double distance_AC_BS)
 {
-    this->distant_AC_BS = distant_AC_BS;
+    this->distance_AC_BS = distance_AC_BS;
 }
 
 double Packet::getDepartureAC_time() const
@@ -443,7 +443,7 @@ const char *PacketDescriptor::getFieldName(int field) const
         "id_baseStation",
         "x_aircraft",
         "y_aircraft",
-        "distant_AC_BS",
+        "distance_AC_BS",
         "departureAC_time",
         "arrivalBS_time",
         "departureBS_time",
@@ -460,7 +460,7 @@ int PacketDescriptor::findField(const char *fieldName) const
     if (fieldName[0]=='i' && strcmp(fieldName, "id_baseStation")==0) return base+1;
     if (fieldName[0]=='x' && strcmp(fieldName, "x_aircraft")==0) return base+2;
     if (fieldName[0]=='y' && strcmp(fieldName, "y_aircraft")==0) return base+3;
-    if (fieldName[0]=='d' && strcmp(fieldName, "distant_AC_BS")==0) return base+4;
+    if (fieldName[0]=='d' && strcmp(fieldName, "distance_AC_BS")==0) return base+4;
     if (fieldName[0]=='d' && strcmp(fieldName, "departureAC_time")==0) return base+5;
     if (fieldName[0]=='a' && strcmp(fieldName, "arrivalBS_time")==0) return base+6;
     if (fieldName[0]=='d' && strcmp(fieldName, "departureBS_time")==0) return base+7;
@@ -558,7 +558,7 @@ std::string PacketDescriptor::getFieldValueAsString(void *object, int field, int
         case 1: return long2string(pp->getId_baseStation());
         case 2: return double2string(pp->getX_aircraft());
         case 3: return double2string(pp->getY_aircraft());
-        case 4: return double2string(pp->getDistant_AC_BS());
+        case 4: return double2string(pp->getDistance_AC_BS());
         case 5: return double2string(pp->getDepartureAC_time());
         case 6: return double2string(pp->getArrivalBS_time());
         case 7: return double2string(pp->getDepartureBS_time());
@@ -581,7 +581,7 @@ bool PacketDescriptor::setFieldValueAsString(void *object, int field, int i, con
         case 1: pp->setId_baseStation(string2long(value)); return true;
         case 2: pp->setX_aircraft(string2double(value)); return true;
         case 3: pp->setY_aircraft(string2double(value)); return true;
-        case 4: pp->setDistant_AC_BS(string2double(value)); return true;
+        case 4: pp->setDistance_AC_BS(string2double(value)); return true;
         case 5: pp->setDepartureAC_time(string2double(value)); return true;
         case 6: pp->setArrivalBS_time(string2double(value)); return true;
         case 7: pp->setDepartureBS_time(string2double(value)); return true;
