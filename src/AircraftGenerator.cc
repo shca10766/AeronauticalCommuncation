@@ -30,11 +30,13 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
             cModule *aircraft = aicraftType->create(aircraftName, this->getParentModule());
 
             // set up parameter "id"
-            aircraft->par("id") = aircraftCounter;
+            aircraft -> par("id") = aircraftCounter;
+            aircraft -> par("k") = par("k_generator");
+            aircraft -> par("t") = par("t_generator");
             double time = simTime().dbl();
-            aircraft->par("startTime") = time;
-            aircraft->finalizeParameters();
-            aircraft->buildInside();
+            aircraft -> par("startTime") = time;
+            aircraft -> finalizeParameters();
+            aircraft -> buildInside();
 
             // create activation message
             aircraft->scheduleStart(simTime());
