@@ -10,6 +10,10 @@ using namespace omnetpp;
  */
 class AircraftGenerator : public cSimpleModule {
     private:
+        int aircraftCounter;
+        std::string aircraftName;
+        simsignal_t createdSignal;
+
     protected:
         virtual void initialize();
         virtual void handleMessage(cMessage *msg);
