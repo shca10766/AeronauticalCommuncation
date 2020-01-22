@@ -28,7 +28,7 @@ class Aircraft : public cSimpleModule {
     protected:
         virtual void initialize();
         virtual void connectionBS();
-        virtual void distanceBS();
+        virtual double distanceBS();
         virtual void handleMessage(cMessage *msg);
 };
 

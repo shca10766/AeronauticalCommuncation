@@ -52,7 +52,6 @@ network Area {
                 y_BS = 150; 
         }
         controlTower: ControlTower;
-        aircraft: Aircraft;
 	connections allowunconnected:
 	    baseStation1.outBS --> controlTower.inCT++;
 	    baseStation2.outBS --> controlTower.inCT++;

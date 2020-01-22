@@ -23,5 +23,5 @@ simple Aircraft {
         //double k;     
         //double arrival_time; 
     gates:
-        //output outAircraft;
+        output outAircraft;
 }
