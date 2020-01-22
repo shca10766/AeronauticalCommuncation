@@ -190,8 +190,6 @@ Packet::Packet(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
     this->y_aircraft = 0;
     this->distance_AC_BS = 0;
     this->departureAC_time = 0;
-    this->arrivalBS_time = 0;
-    this->departureBS_time = 0;
     this->arrivalCT_time = 0;
 }
 
@@ -223,8 +221,6 @@ void Packet::copy(const Packet& other)
     this->y_aircraft = other.y_aircraft;
     this->distance_AC_BS = other.distance_AC_BS;
     this->departureAC_time = other.departureAC_time;
-    this->arrivalBS_time = other.arrivalBS_time;
-    this->departureBS_time = other.departureBS_time;
     this->arrivalCT_time = other.arrivalCT_time;
 }
 
@@ -240,8 +236,6 @@ void Packet::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->y_aircraft);
     doParsimPacking(b,this->distance_AC_BS);
     doParsimPacking(b,this->departureAC_time);
-    doParsimPacking(b,this->arrivalBS_time);
-    doParsimPacking(b,this->departureBS_time);
     doParsimPacking(b,this->arrivalCT_time);
 }
 
@@ -257,8 +251,6 @@ void Packet::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->y_aircraft);
     doParsimUnpacking(b,this->distance_AC_BS);
     doParsimUnpacking(b,this->departureAC_time);
-    doParsimUnpacking(b,this->arrivalBS_time);
-    doParsimUnpacking(b,this->departureBS_time);
     doParsimUnpacking(b,this->arrivalCT_time);
 }
 
@@ -352,26 +344,6 @@ void Packet::setDepartureAC_time(double departureAC_time)
     this->departureAC_time = departureAC_time;
 }
 
-double Packet::getArrivalBS_time() const
-{
-    return this->arrivalBS_time;
-}
-
-void Packet::setArrivalBS_time(double arrivalBS_time)
-{
-    this->arrivalBS_time = arrivalBS_time;
-}
-
-double Packet::getDepartureBS_time() const
-{
-    return this->departureBS_time;
-}
-
-void Packet::setDepartureBS_time(double departureBS_time)
-{
-    this->departureBS_time = departureBS_time;
-}
-
 double Packet::getArrivalCT_time() const
 {
     return this->arrivalCT_time;
@@ -447,7 +419,7 @@ const char *PacketDescriptor::getProperty(const char *propertyname) const
 int PacketDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 12+basedesc->getFieldCount() : 12;
+    return basedesc ? 10+basedesc->getFieldCount() : 10;
 }
 
 unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
@@ -469,10 +441,8 @@ unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
-        FD_ISEDITABLE,
-        FD_ISEDITABLE,
     };
-    return (field>=0 && field<12) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<10) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PacketDescriptor::getFieldName(int field) const
@@ -493,11 +463,9 @@ const char *PacketDescriptor::getFieldName(int field) const
         "y_aircraft",
         "distance_AC_BS",
         "departureAC_time",
-        "arrivalBS_time",
-        "departureBS_time",
         "arrivalCT_time",
     };
-    return (field>=0 && field<12) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<10) ? fieldNames[field] : nullptr;
 }
 
 int PacketDescriptor::findField(const char *fieldName) const
@@ -513,9 +481,7 @@ int PacketDescriptor::findField(const char *fieldName) const
     if (fieldName[0]=='y' && strcmp(fieldName, "y_aircraft")==0) return base+6;
     if (fieldName[0]=='d' && strcmp(fieldName, "distance_AC_BS")==0) return base+7;
     if (fieldName[0]=='d' && strcmp(fieldName, "departureAC_time")==0) return base+8;
-    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalBS_time")==0) return base+9;
-    if (fieldName[0]=='d' && strcmp(fieldName, "departureBS_time")==0) return base+10;
-    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalCT_time")==0) return base+11;
+    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalCT_time")==0) return base+9;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -538,10 +504,8 @@ const char *PacketDescriptor::getFieldTypeString(int field) const
         "double",
         "double",
         "double",
-        "double",
-        "double",
     };
-    return (field>=0 && field<12) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<10) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **PacketDescriptor::getFieldPropertyNames(int field) const
@@ -617,9 +581,7 @@ std::string PacketDescriptor::getFieldValueAsString(void *object, int field, int
         case 6: return double2string(pp->getY_aircraft());
         case 7: return double2string(pp->getDistance_AC_BS());
         case 8: return double2string(pp->getDepartureAC_time());
-        case 9: return double2string(pp->getArrivalBS_time());
-        case 10: return double2string(pp->getDepartureBS_time());
-        case 11: return double2string(pp->getArrivalCT_time());
+        case 9: return double2string(pp->getArrivalCT_time());
         default: return "";
     }
 }
@@ -643,9 +605,7 @@ bool PacketDescriptor::setFieldValueAsString(void *object, int field, int i, con
         case 6: pp->setY_aircraft(string2double(value)); return true;
         case 7: pp->setDistance_AC_BS(string2double(value)); return true;
         case 8: pp->setDepartureAC_time(string2double(value)); return true;
-        case 9: pp->setArrivalBS_time(string2double(value)); return true;
-        case 10: pp->setDepartureBS_time(string2double(value)); return true;
-        case 11: pp->setArrivalCT_time(string2double(value)); return true;
+        case 9: pp->setArrivalCT_time(string2double(value)); return true;
         default: return false;
     }
 }

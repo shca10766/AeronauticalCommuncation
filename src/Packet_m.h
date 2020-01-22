@@ -29,6 +29,7 @@
  *     int id_aircraft;
  *     int id_baseStation;
  *     int queueCount;
+ * 
  *     simtime_t totalQueueingTime;
  *     simtime_t totalServiceTime;
  * 
@@ -37,8 +38,6 @@
  *     double distance_AC_BS;
  * 
  *     double departureAC_time;
- *     double arrivalBS_time;
- *     double departureBS_time;
  *     double arrivalCT_time;
  * }
  * </pre>
@@ -55,8 +54,6 @@ class Packet : public ::omnetpp::cMessage
     double y_aircraft;
     double distance_AC_BS;
     double departureAC_time;
-    double arrivalBS_time;
-    double departureBS_time;
     double arrivalCT_time;
 
   private:
@@ -94,10 +91,6 @@ class Packet : public ::omnetpp::cMessage
     virtual void setDistance_AC_BS(double distance_AC_BS);
     virtual double getDepartureAC_time() const;
     virtual void setDepartureAC_time(double departureAC_time);
-    virtual double getArrivalBS_time() const;
-    virtual void setArrivalBS_time(double arrivalBS_time);
-    virtual double getDepartureBS_time() const;
-    virtual void setDepartureBS_time(double departureBS_time);
     virtual double getArrivalCT_time() const;
     virtual void setArrivalCT_time(double arrivalCT_time);
 };

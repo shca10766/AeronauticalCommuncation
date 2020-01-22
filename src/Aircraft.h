@@ -28,6 +28,10 @@ class Aircraft : public cSimpleModule {
 
         // The packet that the Aircraft sends periodically (each k s)
         Packet *packet;
+
+        //
+        cMessage *event_t;
+        cMessage *event_k;
     protected:
         virtual void initialize();
         virtual bool connectionBS();
