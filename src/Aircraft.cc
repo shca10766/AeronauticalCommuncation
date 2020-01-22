@@ -88,7 +88,7 @@ void Aircraft::initialize() {
 
     // We generate the first packet
     generatePacket();
-    //send(packet, "outAircraft");
+    send(packet, "outAircraft");
     packet = nullptr;
 
     // k periodicity : we send a packet to the BS each k seconds
@@ -125,7 +125,7 @@ void Aircraft::handleMessage(cMessage *msg) {
         scheduleAt(simTime().dbl() + par("k").doubleValue(), event_k);
         // A/C generates a packet for BS
         generatePacket();
-        //send(packet, "outAircraft");
+        send(packet, "outAircraft");
         packet = nullptr;
     }
 
