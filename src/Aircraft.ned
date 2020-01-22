@@ -21,7 +21,7 @@ package aeronauticalcommunication;
 simple Aircraft {
     parameters:  
         double t;
-        //double k;     
+        double k;     
         double startTime;
         int id; 
     gates:

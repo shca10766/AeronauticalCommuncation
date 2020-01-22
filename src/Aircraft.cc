@@ -91,9 +91,9 @@ void Aircraft::initialize() {
 
 
 void Aircraft::handleMessage(cMessage *msg) {
-    if(connectionBS){
+    if(connectionBS()){
         // create self-message that will be send after t seconds
-        event_t = new cMessage("event_t");
+        cMessage *event_t = new cMessage("event_t");
         scheduleAt(simTime()+par("t").doubleValue(),event_t);
         delete event_t;
     }else{
@@ -103,7 +103,7 @@ void Aircraft::handleMessage(cMessage *msg) {
     }
 }
 
-void Aircraft::connectionBS() {
+bool Aircraft::connectionBS() {
     // we compute the slope of the Aircraft trajectory
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival

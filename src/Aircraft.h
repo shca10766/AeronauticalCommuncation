@@ -26,7 +26,7 @@ class Aircraft : public cSimpleModule {
         Packet *packet;
     protected:
         virtual void initialize();
-        virtual void connectionBS();
+        virtual bool connectionBS();
         virtual void distanceBS();
         virtual void generatePacket();
         virtual void handleMessage(cMessage *msg);
