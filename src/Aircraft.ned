@@ -20,7 +20,7 @@ package aeronauticalcommunication;
 //
 simple Aircraft {
     parameters:  
-        //double t;
+        double t;
         //double k;     
         double startTime;
         int id; 
