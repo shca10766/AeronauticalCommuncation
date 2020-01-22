@@ -21,4 +21,7 @@ package aeronauticalcommunication;
 simple AircraftGenerator {
     parameters:
         volatile double interArrivalTime @unit(s); // time between generated Aircraft
+        int nbAircraft = default(-1); // number of Aircraft to be generated (-1 means no limit)
+        double startTime @unit(s) = default(interArrivalTime); // when the AircraftGenerator creates the first Aircraft
+        double stopTime @unit(s) = default(-1s); // when the AircraftGenerator stops the Aircraft generation (-1 means no limit)
 }
