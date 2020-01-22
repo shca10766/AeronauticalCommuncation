@@ -123,7 +123,7 @@ void Aircraft::handleMessage(cMessage *msg) {
         // A/C generates a packet for BS
         generatePacket();
         // We set the time where the packet leaves the A/C
-        packet->setDepartureAC_time(simTime().dbl());
+        packet->setCreationTime(simTime());
         send(packet, "out");
         packet = nullptr;
         event_k = nullptr;
@@ -192,4 +192,8 @@ void Aircraft::distanceBS() {
     packet -> setX_aircraft(x);
     packet -> setY_aircraft(y);
     packet -> setDistance_AC_BS(d);
+}
+
+void Aircraft::finish(){
+
 }

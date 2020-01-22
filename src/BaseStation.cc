@@ -128,4 +128,5 @@ void BaseStation::endService(Packet *packet)
 
 void BaseStation::finish()
 {
+
 }

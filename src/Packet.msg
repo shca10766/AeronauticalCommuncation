@@ -20,14 +20,10 @@ message Packet {
     int id_aircraft;
     int id_baseStation;
     int queueCount;
-    
-    simtime_t totalQueueingTime;
-    simtime_t totalServiceTime;
-    
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;
-    
-    double departureAC_time;
-    double arrivalCT_time;
+    simtime_t totalQueueingTime;
+    simtime_t totalServiceTime;
+    simtime_t creationTime;
 }
