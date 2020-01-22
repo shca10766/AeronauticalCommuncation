@@ -183,6 +183,9 @@ Packet::Packet(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
 {
     this->id_aircraft = 0;
     this->id_baseStation = 0;
+    this->queueCount = 0;
+    this->totalQueueingTime = 0;
+    this->totalServiceTime = 0;
     this->x_aircraft = 0;
     this->y_aircraft = 0;
     this->distance_AC_BS = 0;
@@ -213,6 +216,9 @@ void Packet::copy(const Packet& other)
 {
     this->id_aircraft = other.id_aircraft;
     this->id_baseStation = other.id_baseStation;
+    this->queueCount = other.queueCount;
+    this->totalQueueingTime = other.totalQueueingTime;
+    this->totalServiceTime = other.totalServiceTime;
     this->x_aircraft = other.x_aircraft;
     this->y_aircraft = other.y_aircraft;
     this->distance_AC_BS = other.distance_AC_BS;
@@ -227,6 +233,9 @@ void Packet::parsimPack(omnetpp::cCommBuffer *b) const
     ::omnetpp::cMessage::parsimPack(b);
     doParsimPacking(b,this->id_aircraft);
     doParsimPacking(b,this->id_baseStation);
+    doParsimPacking(b,this->queueCount);
+    doParsimPacking(b,this->totalQueueingTime);
+    doParsimPacking(b,this->totalServiceTime);
     doParsimPacking(b,this->x_aircraft);
     doParsimPacking(b,this->y_aircraft);
     doParsimPacking(b,this->distance_AC_BS);
@@ -241,6 +250,9 @@ void Packet::parsimUnpack(omnetpp::cCommBuffer *b)
     ::omnetpp::cMessage::parsimUnpack(b);
     doParsimUnpacking(b,this->id_aircraft);
     doParsimUnpacking(b,this->id_baseStation);
+    doParsimUnpacking(b,this->queueCount);
+    doParsimUnpacking(b,this->totalQueueingTime);
+    doParsimUnpacking(b,this->totalServiceTime);
     doParsimUnpacking(b,this->x_aircraft);
     doParsimUnpacking(b,this->y_aircraft);
     doParsimUnpacking(b,this->distance_AC_BS);
@@ -268,6 +280,36 @@ int Packet::getId_baseStation() const
 void Packet::setId_baseStation(int id_baseStation)
 {
     this->id_baseStation = id_baseStation;
+}
+
+int Packet::getQueueCount() const
+{
+    return this->queueCount;
+}
+
+void Packet::setQueueCount(int queueCount)
+{
+    this->queueCount = queueCount;
+}
+
+::omnetpp::simtime_t Packet::getTotalQueueingTime() const
+{
+    return this->totalQueueingTime;
+}
+
+void Packet::setTotalQueueingTime(::omnetpp::simtime_t totalQueueingTime)
+{
+    this->totalQueueingTime = totalQueueingTime;
+}
+
+::omnetpp::simtime_t Packet::getTotalServiceTime() const
+{
+    return this->totalServiceTime;
+}
+
+void Packet::setTotalServiceTime(::omnetpp::simtime_t totalServiceTime)
+{
+    this->totalServiceTime = totalServiceTime;
 }
 
 double Packet::getX_aircraft() const
@@ -405,7 +447,7 @@ const char *PacketDescriptor::getProperty(const char *propertyname) const
 int PacketDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 9+basedesc->getFieldCount() : 9;
+    return basedesc ? 12+basedesc->getFieldCount() : 12;
 }
 
 unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
@@ -426,8 +468,11 @@ unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
+        FD_ISEDITABLE,
     };
-    return (field>=0 && field<9) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<12) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PacketDescriptor::getFieldName(int field) const
@@ -441,6 +486,9 @@ const char *PacketDescriptor::getFieldName(int field) const
     static const char *fieldNames[] = {
         "id_aircraft",
         "id_baseStation",
+        "queueCount",
+        "totalQueueingTime",
+        "totalServiceTime",
         "x_aircraft",
         "y_aircraft",
         "distance_AC_BS",
@@ -449,7 +497,7 @@ const char *PacketDescriptor::getFieldName(int field) const
         "departureBS_time",
         "arrivalCT_time",
     };
-    return (field>=0 && field<9) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<12) ? fieldNames[field] : nullptr;
 }
 
 int PacketDescriptor::findField(const char *fieldName) const
@@ -458,13 +506,16 @@ int PacketDescriptor::findField(const char *fieldName) const
     int base = basedesc ? basedesc->getFieldCount() : 0;
     if (fieldName[0]=='i' && strcmp(fieldName, "id_aircraft")==0) return base+0;
     if (fieldName[0]=='i' && strcmp(fieldName, "id_baseStation")==0) return base+1;
-    if (fieldName[0]=='x' && strcmp(fieldName, "x_aircraft")==0) return base+2;
-    if (fieldName[0]=='y' && strcmp(fieldName, "y_aircraft")==0) return base+3;
-    if (fieldName[0]=='d' && strcmp(fieldName, "distance_AC_BS")==0) return base+4;
-    if (fieldName[0]=='d' && strcmp(fieldName, "departureAC_time")==0) return base+5;
-    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalBS_time")==0) return base+6;
-    if (fieldName[0]=='d' && strcmp(fieldName, "departureBS_time")==0) return base+7;
-    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalCT_time")==0) return base+8;
+    if (fieldName[0]=='q' && strcmp(fieldName, "queueCount")==0) return base+2;
+    if (fieldName[0]=='t' && strcmp(fieldName, "totalQueueingTime")==0) return base+3;
+    if (fieldName[0]=='t' && strcmp(fieldName, "totalServiceTime")==0) return base+4;
+    if (fieldName[0]=='x' && strcmp(fieldName, "x_aircraft")==0) return base+5;
+    if (fieldName[0]=='y' && strcmp(fieldName, "y_aircraft")==0) return base+6;
+    if (fieldName[0]=='d' && strcmp(fieldName, "distance_AC_BS")==0) return base+7;
+    if (fieldName[0]=='d' && strcmp(fieldName, "departureAC_time")==0) return base+8;
+    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalBS_time")==0) return base+9;
+    if (fieldName[0]=='d' && strcmp(fieldName, "departureBS_time")==0) return base+10;
+    if (fieldName[0]=='a' && strcmp(fieldName, "arrivalCT_time")==0) return base+11;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -479,6 +530,9 @@ const char *PacketDescriptor::getFieldTypeString(int field) const
     static const char *fieldTypeStrings[] = {
         "int",
         "int",
+        "int",
+        "simtime_t",
+        "simtime_t",
         "double",
         "double",
         "double",
@@ -487,7 +541,7 @@ const char *PacketDescriptor::getFieldTypeString(int field) const
         "double",
         "double",
     };
-    return (field>=0 && field<9) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<12) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **PacketDescriptor::getFieldPropertyNames(int field) const
@@ -556,13 +610,16 @@ std::string PacketDescriptor::getFieldValueAsString(void *object, int field, int
     switch (field) {
         case 0: return long2string(pp->getId_aircraft());
         case 1: return long2string(pp->getId_baseStation());
-        case 2: return double2string(pp->getX_aircraft());
-        case 3: return double2string(pp->getY_aircraft());
-        case 4: return double2string(pp->getDistance_AC_BS());
-        case 5: return double2string(pp->getDepartureAC_time());
-        case 6: return double2string(pp->getArrivalBS_time());
-        case 7: return double2string(pp->getDepartureBS_time());
-        case 8: return double2string(pp->getArrivalCT_time());
+        case 2: return long2string(pp->getQueueCount());
+        case 3: return simtime2string(pp->getTotalQueueingTime());
+        case 4: return simtime2string(pp->getTotalServiceTime());
+        case 5: return double2string(pp->getX_aircraft());
+        case 6: return double2string(pp->getY_aircraft());
+        case 7: return double2string(pp->getDistance_AC_BS());
+        case 8: return double2string(pp->getDepartureAC_time());
+        case 9: return double2string(pp->getArrivalBS_time());
+        case 10: return double2string(pp->getDepartureBS_time());
+        case 11: return double2string(pp->getArrivalCT_time());
         default: return "";
     }
 }
@@ -579,13 +636,16 @@ bool PacketDescriptor::setFieldValueAsString(void *object, int field, int i, con
     switch (field) {
         case 0: pp->setId_aircraft(string2long(value)); return true;
         case 1: pp->setId_baseStation(string2long(value)); return true;
-        case 2: pp->setX_aircraft(string2double(value)); return true;
-        case 3: pp->setY_aircraft(string2double(value)); return true;
-        case 4: pp->setDistance_AC_BS(string2double(value)); return true;
-        case 5: pp->setDepartureAC_time(string2double(value)); return true;
-        case 6: pp->setArrivalBS_time(string2double(value)); return true;
-        case 7: pp->setDepartureBS_time(string2double(value)); return true;
-        case 8: pp->setArrivalCT_time(string2double(value)); return true;
+        case 2: pp->setQueueCount(string2long(value)); return true;
+        case 3: pp->setTotalQueueingTime(string2simtime(value)); return true;
+        case 4: pp->setTotalServiceTime(string2simtime(value)); return true;
+        case 5: pp->setX_aircraft(string2double(value)); return true;
+        case 6: pp->setY_aircraft(string2double(value)); return true;
+        case 7: pp->setDistance_AC_BS(string2double(value)); return true;
+        case 8: pp->setDepartureAC_time(string2double(value)); return true;
+        case 9: pp->setArrivalBS_time(string2double(value)); return true;
+        case 10: pp->setDepartureBS_time(string2double(value)); return true;
+        case 11: pp->setArrivalCT_time(string2double(value)); return true;
         default: return false;
     }
 }

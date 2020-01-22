@@ -28,6 +28,9 @@
  * {
  *     int id_aircraft;
  *     int id_baseStation;
+ *     int queueCount;
+ *     simtime_t totalQueueingTime;
+ *     simtime_t totalServiceTime;
  * 
  *     double x_aircraft;
  *     double y_aircraft;
@@ -45,6 +48,9 @@ class Packet : public ::omnetpp::cMessage
   protected:
     int id_aircraft;
     int id_baseStation;
+    int queueCount;
+    ::omnetpp::simtime_t totalQueueingTime;
+    ::omnetpp::simtime_t totalServiceTime;
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;
@@ -74,6 +80,12 @@ class Packet : public ::omnetpp::cMessage
     virtual void setId_aircraft(int id_aircraft);
     virtual int getId_baseStation() const;
     virtual void setId_baseStation(int id_baseStation);
+    virtual int getQueueCount() const;
+    virtual void setQueueCount(int queueCount);
+    virtual ::omnetpp::simtime_t getTotalQueueingTime() const;
+    virtual void setTotalQueueingTime(::omnetpp::simtime_t totalQueueingTime);
+    virtual ::omnetpp::simtime_t getTotalServiceTime() const;
+    virtual void setTotalServiceTime(::omnetpp::simtime_t totalServiceTime);
     virtual double getX_aircraft() const;
     virtual void setX_aircraft(double x_aircraft);
     virtual double getY_aircraft() const;

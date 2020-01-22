@@ -3,7 +3,7 @@
 
 Define_Module(BaseStation);
 
-BaseStation::Basestation()
+BaseStation::BaseStation()
 {
     packetServiced = nullptr;
     endServiceMsg = nullptr;
@@ -112,7 +112,7 @@ simtime_t BaseStation::startService(Packet *packet)
     return par("serviceTime").doubleValue();
 }
 
-void BaseStation::endService(packet *packet)
+void BaseStation::endService(Packet *packet)
 {
     EV << "Finishing service of " << packet->getName() << endl;
     simtime_t d = simTime() - packet->getTimestamp();

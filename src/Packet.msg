@@ -19,7 +19,9 @@
 message Packet {
     int id_aircraft;
     int id_baseStation;
-    int queueCont;
+    int queueCount;
+    simtime_t totalQueueingTime;
+    simtime_t totalServiceTime;
     
     double x_aircraft;
     double y_aircraft;
