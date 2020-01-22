@@ -20,5 +20,5 @@ package aeronauticalcommunication;
 //
 simple AircraftGenerator {
     parameters:
-        volatile double interArrivalTime @unit(s); // time between generated Aircraft dans le omnetpp.ini mettre **.interArrivalTime = exponential(55s) et **.interArrivalTime = 55s
+        volatile double interArrivalTime @unit(s); // time between generated Aircraft
 }
