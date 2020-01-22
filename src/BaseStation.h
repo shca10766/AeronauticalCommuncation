@@ -12,20 +12,22 @@ using namespace omnetpp;
 class BaseStation : public cSimpleModule {
     private:
         // signals
-        simsignal_t droppedSignal;
         simsignal_t queueLengthSignal;
         simsignal_t queueingTimeSignal;
         simsignal_t busySignal;
 
+        // serviced packet
         Packet *packetServiced;
+        // message to inform that the server has finished to service a packet
         cMessage *endServiceMsg;
+        // queue of the BS
         cQueue queue;
 
-        // characteristics
+        // characteristics of the queue of the Bs
         int capacity;
         bool fifo;
 
-        //
+        // packet in the queue
         Packet *getFromQueue();
 
     public:
