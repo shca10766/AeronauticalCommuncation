@@ -5,6 +5,9 @@
 Define_Module(Aircraft);
 
 void Aircraft::initialize() {
+    packet = nullptr;
+    event_t = nullptr;
+
     double random_init = uniform(0,1);
     double random_arrival = uniform(0,200);
 
@@ -81,82 +84,101 @@ void Aircraft::initialize() {
     }
 
     // We connect to the first time to a BS
-    connectionBS();
+    connectionBS(x_arrival, y_arrival);
 
     // We generate the first packet
     generatePacket();
-    send(packet, "out");
+    //send(packet, "outAircraft");
+    packet = nullptr;
 
     // k periodicity : we send a packet to the BS each k seconds
     event_k = new cMessage("event_k");
-    scheduleAt(simTime()+par("k").doubleValue(),event_k);
+    scheduleAt(simTime().dbl() + par("k").doubleValue(), event_k);
 
     // t periodicity : we do a handover operation each t seconds
     event_t = new cMessage("event_t");
-    scheduleAt(simTime()+par("t").doubleValue(),event_t);
+    scheduleAt(simTime().dbl() + par("t").doubleValue(), event_t);
 }
 
 
 void Aircraft::handleMessage(cMessage *msg) {
     // When the Aircraft receives a message for an handover operation
     if(msg == event_t) {
+        double x = getXPosition();
+        double y = getYPosition();
+
         // We connect the Aircraft to the nearest BS
-        if(connectionBS()){
-            // creation of a self-message event_t
-            event_t = new cMessage("event_t");
+        if(connectionBS(x,y)){
             // the self-message is scheduled to be sent after t seconds
-            scheduleAt(simTime()+par("t").doubleValue(),event_t);
-            event_t = nullptr;
+            scheduleAt(simTime().dbl() + par("t").doubleValue(), event_t);
         // The Aircraft is not in the Area anymore
         }else{
             // destruction of the Aircraft module
-            //this->callFinish();
-            this->deleteModule();
+            // this->callFinish();
+            this -> deleteModule();
         }
     }
+
     // When the Aircraft receives a message for sending a packet to the BS
     else {
-        // creation of a self-message event_k
-        event_k = new cMessage("event_k");
         // the self-message is scheduled to be sent after k seconds
-        scheduleAt(simTime()+par("k").doubleValue(),event_k);
+        scheduleAt(simTime().dbl() + par("k").doubleValue(), event_k);
         // A/C generates a packet for BS
         generatePacket();
-        // We set the time where the packet leaves the A/C
-        packet->setCreationTime(simTime());
-        send(packet, "out");
+        //send(packet, "outAircraft");
         packet = nullptr;
-        event_k = nullptr;
     }
 
 }
 
-bool Aircraft::connectionBS() {
-    // we compute the slope of the Aircraft trajectory
-    double a = (x_departure - x_arrival)/(y_departure - y_arrival);
-    // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival
-    double x = (v*simTime().dbl()*a)/(sqrt(1+a*a)) + x_arrival;
-    // we compute the y coordinate of the Aircraft, using the slope, the simTime and the velocity and the y_arrival
-    double y = y_arrival + (v*simTime().dbl())/(sqrt(1+a*a));
-
+bool Aircraft::connectionBS(double x, double y) {
     // when the aircraft is outside the Area
     if (x < 0 || y < 0 || x > 200 || y > 200){
         return false;
     }
     // when the aircraft is inside the Area
-    else{
+    else {
+        cModule *new_BS_connect = nullptr;
         if (x < 100 && y >= 100) { // when the aircraft is on the BS1 area
-            BS_connect = getParentModule() -> getSubmodule("baseStation1");
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation1");
         }
         else if (x >= 100 && y >= 100) {// when the aircraft is on the BS2 area
-            BS_connect = getParentModule() -> getSubmodule("baseStation2");
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation2");
         }
         else if (x < 100 && y < 100) {// when the aircraft is on the BS3 area
-            BS_connect = getParentModule() -> getSubmodule("baseStation3");
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation3");
         }
         else {// when the aircraft is on the BS4 area
-            BS_connect = getParentModule() -> getSubmodule("baseStation4");
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation4");
         }
+        if (new_BS_connect != BS_connect) {
+            cGate * outAircraft = gate("outAircraft");
+
+            if (BS_connect != nullptr) {
+                outAircraft -> disconnect();
+            }
+
+            BS_connect = new_BS_connect;
+
+            int sizeGate = BS_connect -> gateSize("inBS");
+            int index = 0;
+            cGate * inBS = nullptr;
+
+            while(index < sizeGate && inBS == nullptr) {
+                bool gatesConnected = BS_connect -> gate("inBS", index) -> isConnected();
+                if (!gatesConnected) {
+                    inBS = BS_connect -> gate("inBS", index);
+                }
+                index++;
+            }
+
+            if (index == sizeGate) {
+                BS_connect -> setGateSize("inBS", sizeGate + 1);
+                inBS = BS_connect -> gate("inBS", sizeGate);
+            }
+            outAircraft->connectTo(inBS);
+        }
+
         return true;
     }
 }
@@ -171,15 +193,14 @@ void Aircraft::generatePacket() {
 
     // compute the distance d between BS and A/C and retrieve A/C's coordinates
     distanceBS();
+
+    // We set the time where the packet leaves the A/C
+    packet -> setCreationTime(simTime());
 }
 
 void Aircraft::distanceBS() {
-    // we compute the slope of the Aircraft trajectory
-    double a = (x_departure - x_arrival)/(y_departure - y_arrival);
-    // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival
-    double x = (v*simTime().dbl()*a)/(sqrt(1+a*a)) + x_arrival;
-    // we compute the y coordinate of the Aircraft, using the slope, the simTime and the velocity and the y_arrival
-    double y = y_arrival + (v*simTime().dbl())/(sqrt(1+a*a));
+    double x = getXPosition();
+    double y = getYPosition();
 
     // we retrieve the BS's coordinates
     int xBS = BS_connect -> par("x_BS").intValue();
@@ -192,6 +213,22 @@ void Aircraft::distanceBS() {
     packet -> setX_aircraft(x);
     packet -> setY_aircraft(y);
     packet -> setDistance_AC_BS(d);
+}
+
+double Aircraft::getXPosition() {
+    // we compute the slope of the Aircraft trajectory
+    double a = (x_departure - x_arrival)/(y_departure - y_arrival);
+    // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival
+    double x = (v*(simTime().dbl() - par("startTime").doubleValue())*a)/(sqrt(1+a*a)) + x_arrival;
+    return x;
+}
+
+double Aircraft::getYPosition() {
+    // we compute the slope of the Aircraft trajectory
+    double a = (x_departure - x_arrival)/(y_departure - y_arrival);
+    // we compute the y coordinate of the Aircraft, using the slope, the simTime and the velocity and the y_arrival
+    double y = y_arrival + (v*simTime().dbl())/(sqrt(1+a*a));
+    return y;
 }
 
 void Aircraft::finish(){

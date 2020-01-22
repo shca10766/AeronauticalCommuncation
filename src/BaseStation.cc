@@ -113,8 +113,8 @@ simtime_t BaseStation::startService(Packet *packet)
     EV << "Starting service of " << packet->getName() << endl;
     packet->setTimestamp();
     // s = T.d², T = 0.03
-    par("serviceTime").setDoubleValue(0.03*pow(packet->getDistance_AC_BS(),2));
-    return par("serviceTime").doubleValue();
+    double serviceTime = 0.03*pow(packet->getDistance_AC_BS(),2);
+    return serviceTime;
 }
 
 // We end the service time for the packet in the Base Station

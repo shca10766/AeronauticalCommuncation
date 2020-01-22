@@ -24,7 +24,7 @@ class Aircraft : public cSimpleModule {
         double y_departure;
 
         // The Base Station connected to the Aircraft. The Aircraft changes BS each t s.
-        cModule *BS_connect;
+        cModule *BS_connect = nullptr;
 
         // The packet that the Aircraft sends periodically (each k s)
         Packet *packet;
@@ -34,10 +34,12 @@ class Aircraft : public cSimpleModule {
         cMessage *event_k;
     protected:
         virtual void initialize();
-        virtual bool connectionBS();
+        virtual bool connectionBS(double x, double y);
         virtual void distanceBS();
         virtual void generatePacket();
         virtual void handleMessage(cMessage *msg);
+        virtual double getXPosition();
+        virtual double getYPosition();
         virtual void finish();
 };
 

@@ -15,35 +15,36 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
     ASSERT(msg->isSelfMessage());
     int nbAircraft = par("nbAircraft");
     double stopTime = par("stopTime");
-        if ((nbAircraft < 0 || nbAircraft > aircraftCounter) && (stopTime < 0 || stopTime > simTime().dbl())) {
-            // reschedule the timer for the next message
-            scheduleAt(simTime() + par("interArrivalTime").doubleValue(), msg);
+    if ((nbAircraft < 0 || nbAircraft > aircraftCounter) && (stopTime < 0 || stopTime > simTime().dbl())) {
+        // reschedule the timer for the next message
+        scheduleAt(simTime() + par("interArrivalTime").doubleValue(), msg);
 
-            // find factory Aircraft
-            cModuleType *aicraftType = cModuleType::get("aeronauticalcommunication.Aircraft");
+        // find factory Aircraft
+        cModuleType *aicraftType = cModuleType::get("aeronauticalcommunication.Aircraft");
 
-            // create Aircraft module
-            aircraftCounter++;
-            char nbAircraft_string[64];
-            sprintf(nbAircraft_string, "AC%d", aircraftCounter);
-            const char * aircraftName = nbAircraft_string;
-            cModule *aircraft = aicraftType->create(aircraftName, this->getParentModule());
+        // create Aircraft module
+        aircraftCounter++;
+        char nbAircraft_string[64];
+        sprintf(nbAircraft_string, "AC%d", aircraftCounter);
+        const char * aircraftName = nbAircraft_string;
+        cModule *aircraft = aicraftType->create(aircraftName, this->getParentModule());
 
-            // set up parameter "id"
-            aircraft -> par("id") = aircraftCounter;
-            aircraft -> par("k") = par("k_generator");
-            aircraft -> par("t") = par("t_generator");
-            double time = simTime().dbl();
-            aircraft -> par("startTime") = time;
-            aircraft -> finalizeParameters();
-            aircraft -> buildInside();
+        // set up parameter "id"
+        aircraft -> par("id") = aircraftCounter;
+        aircraft -> par("k") = par("k_generator");
+        aircraft -> par("t") = par("t_generator");
+        double time = simTime().dbl();
+        aircraft -> par("startTime") = time;
+        aircraft -> finalizeParameters();
+        aircraft -> buildInside();
 
-            // create activation message
-            aircraft->scheduleStart(simTime());
-        }
-        else {
-            // finished
-            delete msg;
-        }
+        // create activation message
+        aircraft->scheduleStart(simTime());
+        aircraft -> callInitialize();
+    }
+    else {
+        // finished
+        delete msg;
+    }
 }
 

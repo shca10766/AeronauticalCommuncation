@@ -42,8 +42,8 @@ simple BaseStation {
 		// characteristic of the queue
         int capacity = default(-1);    // unlimited queue
         bool fifo = default(true);     // works as a queue (fifo=true)
-        volatile double serviceTime @unit(s); // service time of the server: s = T.d²
+        //volatile double serviceTime @unit(s); // service time of the server: s = T.d²
     gates:
-        input inBS;
+        input inBS[];
         output outBS;
 }
