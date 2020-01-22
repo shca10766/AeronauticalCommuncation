@@ -123,7 +123,7 @@ void BaseStation::endService(Packet *packet)
     EV << "Finishing service of " << packet->getName() << endl;
     simtime_t d = simTime() - packet->getTimestamp();
     packet->setTotalServiceTime(packet->getTotalServiceTime() + d);
-    send(packet, "out");
+    send(packet, "outBS");
 }
 
 void BaseStation::finish()
