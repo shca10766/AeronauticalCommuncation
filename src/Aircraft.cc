@@ -80,27 +80,53 @@ void Aircraft::initialize() {
         }
     }
 
+    // We connect to the first time to a BS
     connectionBS();
 
-    //event = new cMessage("event");
-    //packet = new Packet();
+    // We generate the first packet
+    generatePacket();
+    send(packet, "out");
 
-    //scheduleAt(par("arrival_time") + par("k").doubleValue(), event);
-    //send(packet, "out");
+    // k periodicity : we send a packet to the BS each k seconds
+    event_k = new cMessage("event_k");
+    scheduleAt(simTime()+par("k").doubleValue(),event_k);
+
+    // t periodicity : we do a handover operation each t seconds
+    event_t = new cMessage("event_t");
+    scheduleAt(simTime()+par("t").doubleValue(),event_t);
 }
 
 
 void Aircraft::handleMessage(cMessage *msg) {
-    if(connectionBS()){
-        // create self-message that will be send after t seconds
-        cMessage *event_t = new cMessage("event_t");
-        scheduleAt(simTime()+par("t").doubleValue(),event_t);
-        delete event_t;
-    }else{
-        // destroy the Aircraft module
-        //this->callFinish();
-        this->deleteModule();
+    // When the Aircraft receives a message for an handover operation
+    if(msg == "event_t") {
+        // We connect the Aircraft to the nearest BS
+        if(connectionBS()){
+            // creation of a self-message event_t
+            cMessage *event_t = new cMessage("event_t");
+            // the self-message is scheduled to be sent after t seconds
+            scheduleAt(simTime()+par("t").doubleValue(),event_t);
+            delete event_t;
+        // The Aircraft is not in the Area anymore
+        }else{
+            // destruction of the Aircraft module
+            //this->callFinish();
+            this->deleteModule();
+        }
     }
+    // When the Aircraft receives a message for sending a packet to the BS
+    else {
+        // creation of a self-message event_k
+        cMessage *event_k = new Message("event_k");
+        // the self-message is scheduled to be sent after k seconds
+        scheduleAt(simTime()+par("k").doubleValue(),event_k);
+        // A/C generates a packet for BS
+        generatePacket();
+        send(packet, "out");
+        packet = nullptr;
+        delete event_k;
+    }
+
 }
 
 bool Aircraft::connectionBS() {

@@ -15,14 +15,18 @@ class Aircraft : public cSimpleModule {
         double v = 0.2639; // Velocity of the aircraft (950 km/h)
         double h = 11.8; // Altitude of the aircraft (km)
 
+        //The geographical stating point of the aircraft in the Area
         double x_arrival;
         double y_arrival;
 
+        //The geographical leaving point of the aircraft in the Area
         double x_departure;
         double y_departure;
 
+        // The Base Station connected to the Aircraft. The Aircraft changes BS each t s.
         cModule *BS_connect;
 
+        // The packet that the Aircraft sends periodically (each k s)
         Packet *packet;
     protected:
         virtual void initialize();
