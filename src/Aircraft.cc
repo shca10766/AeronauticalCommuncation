@@ -122,6 +122,8 @@ void Aircraft::handleMessage(cMessage *msg) {
         scheduleAt(simTime()+par("k").doubleValue(),event_k);
         // A/C generates a packet for BS
         generatePacket();
+        // We set the time where the packet leaves the A/C
+        packet->setDepartureAC_time(simTime().dbl());
         send(packet, "out");
         packet = nullptr;
         event_k = nullptr;

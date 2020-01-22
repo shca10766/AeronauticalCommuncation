@@ -29,7 +29,7 @@ class Aircraft : public cSimpleModule {
         // The packet that the Aircraft sends periodically (each k s)
         Packet *packet;
 
-        //
+        // Events
         cMessage *event_t;
         cMessage *event_k;
     protected:
