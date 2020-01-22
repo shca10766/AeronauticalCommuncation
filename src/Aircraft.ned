@@ -20,8 +20,10 @@ package aeronauticalcommunication;
 //
 simple Aircraft {
     parameters:  
+        //double t;
         //double k;     
-        //double arrival_time; 
+        double startTime;
+        int id; 
     gates:
         output outAircraft;
 }
