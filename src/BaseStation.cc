@@ -110,18 +110,27 @@ simtime_t BaseStation::startService(Packet *packet)
     simtime_t d = simTime() - packet->getTimestamp();
     emit(queueingTimeSignal, d);
     packet->setTotalQueueingTime(packet->getTotalQueueingTime() + d);
-    EV << "Starting service of " << packet->getName() << endl;
+    EV << "Starting service of " << packet->getName();
     packet->setTimestamp();
     // s = T.d² = T.(dBCAC²+h²), T = 0.001
-    double serviceTime = 0.001*(pow(packet->getDistance_AC_BS(),2)+139.24);
-    EV << "Service time : " << serviceTime << "distance : " << packet->getDistance_AC_BS();
+    double serviceTime;
+    //Scenario 1
+    if(par("serviceTime").doubleValue() <= 0) {
+        serviceTime = 0.001*(pow(packet->getDistance_AC_BS(),2)+139.24);
+        EV << "Service time : " << serviceTime << "distance : " << packet->getDistance_AC_BS();
+    }
+    //Scenario 2
+    else {
+        serviceTime = par("serviceTime").doubleValue();
+        EV << "Service time : " << serviceTime;
+    }
     return serviceTime;
 }
 
 // We end the service time for the packet in the Base Station
 void BaseStation::endService(Packet *packet)
 {
-    EV << "Finishing service of " << packet->getName() << endl;
+    EV << "Finishing service of " << packet->getName();
     simtime_t d = simTime() - packet->getTimestamp();
     packet->setTotalServiceTime(packet->getTotalServiceTime() + d);
     send(packet, "outBS");

@@ -25,6 +25,7 @@ simple BaseStation {
         int y_BS;
         int M = default(100);
         
+        //queue icon
         @display("i=block/queue;q=queue");
         
         // signals
@@ -42,7 +43,9 @@ simple BaseStation {
 		// characteristic of the queue
         int capacity = default(-1);    // unlimited queue
         bool fifo = default(true);     // works as a queue (fifo=true)
-        //volatile double serviceTime @unit(s); // service time of the server: s = T.d²
+        
+        //For Scenario 2
+        volatile double serviceTime @unit(s); // exponential
     gates:
         input inBS[];
         output outBS;
