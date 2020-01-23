@@ -18,7 +18,6 @@ BaseStation::~BaseStation()
 void BaseStation::initialize()
 {
     // Statistics (signals)
-    queueingTimeSignal = registerSignal("queueingTime");
     queueLengthSignal = registerSignal("queueLength");
     servingTimeSignal = registerSignal("servingTime");
     emit(queueLengthSignal, 0);
@@ -107,10 +106,6 @@ void BaseStation::arrival(Packet *packet)
 // We start the service time for the packet in the BaseStation
 simtime_t BaseStation::startService(Packet *packet)
 {
-    // gather queueing time statistics
-    simtime_t d = simTime() - packet->getTimestamp();
-    emit(queueingTimeSignal, d);
-    packet->setTotalQueueingTime(packet->getTotalQueueingTime() + d);
     EV << "Starting service of " << packet->getName();
     packet->setTimestamp();
     // s = T.d² = T.(dBCAC²+h²), T = 0.001
@@ -125,6 +120,7 @@ simtime_t BaseStation::startService(Packet *packet)
         serviceTime = par("serviceTime").doubleValue();
         EV << "\nService time : " << serviceTime << " s";
     }
+    packet->setServiceTime(serviceTime);
     emit(servingTimeSignal, serviceTime);
     return serviceTime;
 }
@@ -134,7 +130,6 @@ void BaseStation::endService(Packet *packet)
 {
     EV << "Finishing service of " << packet->getName();
     simtime_t d = simTime() - packet->getTimestamp();
-    packet->setTotalServiceTime(packet->getTotalServiceTime() + d);
     send(packet, "outBS");
 }
 

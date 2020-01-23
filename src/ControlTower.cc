@@ -6,6 +6,7 @@ Define_Module(ControlTower);
 void ControlTower::initialize()
 {
     endToEndDelaySignal = registerSignal("endToEndDelay");
+    serviceTimeSignal = registerSignal("serviceTime");
 }
 
 void ControlTower::handleMessage(cMessage *msg)
@@ -14,6 +15,7 @@ void ControlTower::handleMessage(cMessage *msg)
 
     // gather statistics
     emit(endToEndDelaySignal, simTime() - packet -> getCreationTime());
+    emit(serviceTimeSignal, packet -> getServiceTime());
 
     delete msg;
 }

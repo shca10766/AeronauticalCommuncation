@@ -30,15 +30,13 @@ simple BaseStation {
         
         // signals
         @signal[queueLength](type="long");
-        @signal[queueingTime](type="simtime_t");
         @signal[servingTime](type="simtime_t");
         @signal[busy](type="bool");
         
         // statistics
-        @statistic[queueLength](title="queue length";record=vector,timeavg,max;interpolationmode=sample-hold);
-        @statistic[queueingTime](title="queueing time at dequeue";record=vector?,mean,max;unit=s;interpolationmode=none);
-        @statistic[servingTime](title="service time";record=vector?,mean,max;unit=s;interpolationmode=none);
-        @statistic[busy](title="server busy state";record=vector?,timeavg;interpolationmode=sample-hold);
+        @statistic[queueLength](title="queue length";record=vector,timeavg,min,max;interpolationmode=sample-hold);
+        @statistic[servingTime](title="service time";record=vector,mean;unit=s;interpolationmode=none);
+        @statistic[busy](title="server busy state";record=vector,timeavg;interpolationmode=sample-hold);
 		
 		// characteristic of the queue
         int capacity = default(-1);    // unlimited queue

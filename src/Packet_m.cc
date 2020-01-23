@@ -187,8 +187,7 @@ Packet::Packet(const char *name, short kind) : ::omnetpp::cMessage(name,kind)
     this->x_aircraft = 0;
     this->y_aircraft = 0;
     this->distance_AC_BS = 0;
-    this->totalQueueingTime = 0;
-    this->totalServiceTime = 0;
+    this->serviceTime = 0;
     this->creationTime = 0;
 }
 
@@ -217,8 +216,7 @@ void Packet::copy(const Packet& other)
     this->x_aircraft = other.x_aircraft;
     this->y_aircraft = other.y_aircraft;
     this->distance_AC_BS = other.distance_AC_BS;
-    this->totalQueueingTime = other.totalQueueingTime;
-    this->totalServiceTime = other.totalServiceTime;
+    this->serviceTime = other.serviceTime;
     this->creationTime = other.creationTime;
 }
 
@@ -231,8 +229,7 @@ void Packet::parsimPack(omnetpp::cCommBuffer *b) const
     doParsimPacking(b,this->x_aircraft);
     doParsimPacking(b,this->y_aircraft);
     doParsimPacking(b,this->distance_AC_BS);
-    doParsimPacking(b,this->totalQueueingTime);
-    doParsimPacking(b,this->totalServiceTime);
+    doParsimPacking(b,this->serviceTime);
     doParsimPacking(b,this->creationTime);
 }
 
@@ -245,8 +242,7 @@ void Packet::parsimUnpack(omnetpp::cCommBuffer *b)
     doParsimUnpacking(b,this->x_aircraft);
     doParsimUnpacking(b,this->y_aircraft);
     doParsimUnpacking(b,this->distance_AC_BS);
-    doParsimUnpacking(b,this->totalQueueingTime);
-    doParsimUnpacking(b,this->totalServiceTime);
+    doParsimUnpacking(b,this->serviceTime);
     doParsimUnpacking(b,this->creationTime);
 }
 
@@ -310,24 +306,14 @@ void Packet::setDistance_AC_BS(double distance_AC_BS)
     this->distance_AC_BS = distance_AC_BS;
 }
 
-::omnetpp::simtime_t Packet::getTotalQueueingTime() const
+::omnetpp::simtime_t Packet::getServiceTime() const
 {
-    return this->totalQueueingTime;
+    return this->serviceTime;
 }
 
-void Packet::setTotalQueueingTime(::omnetpp::simtime_t totalQueueingTime)
+void Packet::setServiceTime(::omnetpp::simtime_t serviceTime)
 {
-    this->totalQueueingTime = totalQueueingTime;
-}
-
-::omnetpp::simtime_t Packet::getTotalServiceTime() const
-{
-    return this->totalServiceTime;
-}
-
-void Packet::setTotalServiceTime(::omnetpp::simtime_t totalServiceTime)
-{
-    this->totalServiceTime = totalServiceTime;
+    this->serviceTime = serviceTime;
 }
 
 ::omnetpp::simtime_t Packet::getCreationTime() const
@@ -405,7 +391,7 @@ const char *PacketDescriptor::getProperty(const char *propertyname) const
 int PacketDescriptor::getFieldCount() const
 {
     omnetpp::cClassDescriptor *basedesc = getBaseClassDescriptor();
-    return basedesc ? 9+basedesc->getFieldCount() : 9;
+    return basedesc ? 8+basedesc->getFieldCount() : 8;
 }
 
 unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
@@ -425,9 +411,8 @@ unsigned int PacketDescriptor::getFieldTypeFlags(int field) const
         FD_ISEDITABLE,
         FD_ISEDITABLE,
         FD_ISEDITABLE,
-        FD_ISEDITABLE,
     };
-    return (field>=0 && field<9) ? fieldTypeFlags[field] : 0;
+    return (field>=0 && field<8) ? fieldTypeFlags[field] : 0;
 }
 
 const char *PacketDescriptor::getFieldName(int field) const
@@ -445,11 +430,10 @@ const char *PacketDescriptor::getFieldName(int field) const
         "x_aircraft",
         "y_aircraft",
         "distance_AC_BS",
-        "totalQueueingTime",
-        "totalServiceTime",
+        "serviceTime",
         "creationTime",
     };
-    return (field>=0 && field<9) ? fieldNames[field] : nullptr;
+    return (field>=0 && field<8) ? fieldNames[field] : nullptr;
 }
 
 int PacketDescriptor::findField(const char *fieldName) const
@@ -462,9 +446,8 @@ int PacketDescriptor::findField(const char *fieldName) const
     if (fieldName[0]=='x' && strcmp(fieldName, "x_aircraft")==0) return base+3;
     if (fieldName[0]=='y' && strcmp(fieldName, "y_aircraft")==0) return base+4;
     if (fieldName[0]=='d' && strcmp(fieldName, "distance_AC_BS")==0) return base+5;
-    if (fieldName[0]=='t' && strcmp(fieldName, "totalQueueingTime")==0) return base+6;
-    if (fieldName[0]=='t' && strcmp(fieldName, "totalServiceTime")==0) return base+7;
-    if (fieldName[0]=='c' && strcmp(fieldName, "creationTime")==0) return base+8;
+    if (fieldName[0]=='s' && strcmp(fieldName, "serviceTime")==0) return base+6;
+    if (fieldName[0]=='c' && strcmp(fieldName, "creationTime")==0) return base+7;
     return basedesc ? basedesc->findField(fieldName) : -1;
 }
 
@@ -485,9 +468,8 @@ const char *PacketDescriptor::getFieldTypeString(int field) const
         "double",
         "simtime_t",
         "simtime_t",
-        "simtime_t",
     };
-    return (field>=0 && field<9) ? fieldTypeStrings[field] : nullptr;
+    return (field>=0 && field<8) ? fieldTypeStrings[field] : nullptr;
 }
 
 const char **PacketDescriptor::getFieldPropertyNames(int field) const
@@ -560,9 +542,8 @@ std::string PacketDescriptor::getFieldValueAsString(void *object, int field, int
         case 3: return double2string(pp->getX_aircraft());
         case 4: return double2string(pp->getY_aircraft());
         case 5: return double2string(pp->getDistance_AC_BS());
-        case 6: return simtime2string(pp->getTotalQueueingTime());
-        case 7: return simtime2string(pp->getTotalServiceTime());
-        case 8: return simtime2string(pp->getCreationTime());
+        case 6: return simtime2string(pp->getServiceTime());
+        case 7: return simtime2string(pp->getCreationTime());
         default: return "";
     }
 }
@@ -583,9 +564,8 @@ bool PacketDescriptor::setFieldValueAsString(void *object, int field, int i, con
         case 3: pp->setX_aircraft(string2double(value)); return true;
         case 4: pp->setY_aircraft(string2double(value)); return true;
         case 5: pp->setDistance_AC_BS(string2double(value)); return true;
-        case 6: pp->setTotalQueueingTime(string2simtime(value)); return true;
-        case 7: pp->setTotalServiceTime(string2simtime(value)); return true;
-        case 8: pp->setCreationTime(string2simtime(value)); return true;
+        case 6: pp->setServiceTime(string2simtime(value)); return true;
+        case 7: pp->setCreationTime(string2simtime(value)); return true;
         default: return false;
     }
 }

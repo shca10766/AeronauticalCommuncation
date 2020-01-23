@@ -22,9 +22,12 @@ simple ControlTower {
     parameters:
         // Signals for statistics
         @signal[endToEndDelay](type="simtime_t");
+        @signal[serviceTime](type="simtime_t");
         
         // Statistics
-        @statistic[endToEndDelay](title="end-to-end delay of arrived packets";unit=s;record=vector,mean,max;interpolationmode=none);
+        @statistic[endToEndDelay](title="end-to-end delay of arrived packets";unit=s;record=vector,timeavg,mean,min,max;interpolationmode=none);
+        @statistic[serviceTime](title="service time";record=vector,mean;unit=s;interpolationmode=none);
+        
     gates:
         input inCT[];
 }

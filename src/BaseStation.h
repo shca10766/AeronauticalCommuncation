@@ -13,7 +13,6 @@ class BaseStation : public cSimpleModule {
     private:
         // signals
         simsignal_t queueLengthSignal;
-        simsignal_t queueingTimeSignal;
         simsignal_t servingTimeSignal;
         simsignal_t busySignal;
 

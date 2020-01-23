@@ -32,8 +32,7 @@
  *     double x_aircraft;
  *     double y_aircraft;
  *     double distance_AC_BS;
- *     simtime_t totalQueueingTime;
- *     simtime_t totalServiceTime;
+ *     simtime_t serviceTime;
  *     simtime_t creationTime;
  * }
  * </pre>
@@ -47,8 +46,7 @@ class Packet : public ::omnetpp::cMessage
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;
-    ::omnetpp::simtime_t totalQueueingTime;
-    ::omnetpp::simtime_t totalServiceTime;
+    ::omnetpp::simtime_t serviceTime;
     ::omnetpp::simtime_t creationTime;
 
   private:
@@ -80,10 +78,8 @@ class Packet : public ::omnetpp::cMessage
     virtual void setY_aircraft(double y_aircraft);
     virtual double getDistance_AC_BS() const;
     virtual void setDistance_AC_BS(double distance_AC_BS);
-    virtual ::omnetpp::simtime_t getTotalQueueingTime() const;
-    virtual void setTotalQueueingTime(::omnetpp::simtime_t totalQueueingTime);
-    virtual ::omnetpp::simtime_t getTotalServiceTime() const;
-    virtual void setTotalServiceTime(::omnetpp::simtime_t totalServiceTime);
+    virtual ::omnetpp::simtime_t getServiceTime() const;
+    virtual void setServiceTime(::omnetpp::simtime_t serviceTime);
     virtual ::omnetpp::simtime_t getCreationTime() const;
     virtual void setCreationTime(::omnetpp::simtime_t creationTime);
 };
