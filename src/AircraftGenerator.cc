@@ -24,7 +24,7 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
 
         // create Aircraft module
         aircraftCounter++;
-        char nbAircraft_string[64];
+        char nbAircraft_string[255];
         sprintf(nbAircraft_string, "AC%d", aircraftCounter);
         const char * aircraftName = nbAircraft_string;
         cModule *aircraft = aicraftType->create(aircraftName, this->getParentModule());
