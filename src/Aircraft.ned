@@ -24,6 +24,10 @@ simple Aircraft {
         double k;     
         double startTime;
         int id; 
+        
+        double xpos = default(0.0);
+        double ypos = default(0.0);
+        @display("p=$xpos,$ypos;b=5,5,rect,red,black,2");
     gates:
         output outAircraft;
 }

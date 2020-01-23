@@ -82,9 +82,13 @@ void Aircraft::initialize() {
             x_departure = random_departure;
         }
     }
-
+    x = x_arrival;
+    y = y_arrival;
     // We connect to the first time to a BS
     connectionBS(x_arrival, y_arrival);
+
+    EV << "Arrival " << x_arrival << " !!!! " << y_arrival << endl;
+    EV << "Departure " << x_departure << " !!!! " << y_departure << endl;
 
     // We generate the first packet
     generatePacket();
@@ -103,10 +107,9 @@ void Aircraft::initialize() {
 
 void Aircraft::handleMessage(cMessage *msg) {
     // When the Aircraft receives a message for an handover operation
+    getXPosition();
+    getYPosition();
     if(msg == event_t) {
-        double x = getXPosition();
-        double y = getYPosition();
-
         // We connect the Aircraft to the nearest BS
         if(connectionBS(x,y)){
             // the self-message is scheduled to be sent after t seconds
@@ -140,16 +143,16 @@ bool Aircraft::connectionBS(double x, double y) {
     else {
         cModule *new_BS_connect = nullptr;
         if (x < 100 && y >= 100) { // when the aircraft is on the BS1 area
-            new_BS_connect = getParentModule() -> getSubmodule("baseStation1");
-        }
-        else if (x >= 100 && y >= 100) {// when the aircraft is on the BS2 area
-            new_BS_connect = getParentModule() -> getSubmodule("baseStation2");
-        }
-        else if (x < 100 && y < 100) {// when the aircraft is on the BS3 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation3");
         }
-        else {// when the aircraft is on the BS4 area
+        else if (x >= 100 && y >= 100) {// when the aircraft is on the BS2 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation4");
+        }
+        else if (x < 100 && y < 100) {// when the aircraft is on the BS3 area
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation1");
+        }
+        else {// when the aircraft is on the BS4 area
+            new_BS_connect = getParentModule() -> getSubmodule("baseStation2");
         }
         if (new_BS_connect != BS_connect) {
             cGate * outAircraft = gate("outAircraft");
@@ -199,9 +202,6 @@ void Aircraft::generatePacket() {
 }
 
 void Aircraft::distanceBS() {
-    double x = getXPosition();
-    double y = getYPosition();
-
     // we retrieve the BS's coordinates
     int xBS = BS_connect -> par("x_BS").intValue();
     int yBS = BS_connect -> par("y_BS").intValue();
@@ -215,20 +215,38 @@ void Aircraft::distanceBS() {
     packet -> setDistance_AC_BS(d);
 }
 
-double Aircraft::getXPosition() {
+void Aircraft::getXPosition() {
     // we compute the slope of the Aircraft trajectory
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival
-    double x = (v*(simTime().dbl() - par("startTime").doubleValue())*a)/(sqrt(1+a*a)) + x_arrival;
-    return x;
+    double difX = (v*(simTime().dbl() - par("startTime").doubleValue())*abs(a))/(sqrt(1+a*a));
+    if (x_departure < x_arrival) {
+        x = x_arrival - difX;
+    }
+    else {
+        x = x_arrival + difX;
+    }
+    EV << "x: " << x << endl;
 }
 
-double Aircraft::getYPosition() {
+void Aircraft::getYPosition() {
     // we compute the slope of the Aircraft trajectory
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     // we compute the y coordinate of the Aircraft, using the slope, the simTime and the velocity and the y_arrival
-    double y = y_arrival + (v*simTime().dbl())/(sqrt(1+a*a));
-    return y;
+    double difY = (v*(simTime().dbl() - par("startTime").doubleValue()))/(sqrt(1+a*a));
+    if (y_departure < y_arrival) {
+        y = y_arrival - difY;
+    }
+    else {
+        y = y_arrival + difY;
+    }
+    EV << "y: " << y << endl;
+}
+
+void Aircraft::refreshDisplay() const {
+    // update the position on the 2D canvas, too
+    getDisplayString().setTagArg("p", 0, x);
+    getDisplayString().setTagArg("p", 1, y);
 }
 
 void Aircraft::finish(){

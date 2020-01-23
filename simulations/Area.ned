@@ -22,40 +22,50 @@ import aeronauticalcommunication.ControlTower;
 //
 // TODO auto-generated type
 //
-network Area {
-    parameters: 
-        
+network Area
+{
+    parameters:
+
+        @display("bgb=200,200,grey;bgu=km;bgg=100,1,red");
     submodules:
-        aircraftGenerator: AircraftGenerator;
+        aircraftGenerator: AircraftGenerator {
+            @display("b=5,5,oval;p=99,8");
+        }
         baseStation1: BaseStation {
             parameters:
                 nBS = 1;
                 x_BS = 50;
-                y_BS = 50; 
+                y_BS = 50;
+                @display("p=50,50");
         }
         baseStation2: BaseStation {
             parameters:
                 nBS = 2;
                 x_BS = 150;
-                y_BS = 50; 
+                y_BS = 50;
+                @display("p=150,50");
         }
         baseStation3: BaseStation {
             parameters:
                 nBS = 3;
                 x_BS = 50;
-                y_BS = 150; 
+                y_BS = 150;
+                @display("p=50,150");
         }
         baseStation4: BaseStation {
             parameters:
                 nBS = 4;
                 x_BS = 150;
-                y_BS = 150; 
+                y_BS = 150;
+                @display("p=150,150");
         }
-        controlTower: ControlTower;
-	connections allowunconnected:
-	    baseStation1.outBS --> controlTower.inCT++;
-	    baseStation2.outBS --> controlTower.inCT++;
-	    baseStation3.outBS --> controlTower.inCT++;
-	    baseStation4.outBS --> controlTower.inCT++;
-	    
+        controlTower: ControlTower {
+            @display("p=100,100;b=20,20,oval");
+        }
+    connections allowunconnected:
+        baseStation1.outBS --> controlTower.inCT++;
+        baseStation2.outBS --> controlTower.inCT++;
+        baseStation3.outBS --> controlTower.inCT++;
+        baseStation4.outBS --> controlTower.inCT++;
+
 }

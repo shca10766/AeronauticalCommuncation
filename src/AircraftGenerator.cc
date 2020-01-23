@@ -39,7 +39,7 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
         aircraft -> buildInside();
 
         // create activation message
-        aircraft->scheduleStart(simTime());
+        aircraft-> scheduleStart(simTime());
         aircraft -> callInitialize();
     }
     else {
