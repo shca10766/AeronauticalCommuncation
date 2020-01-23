@@ -23,7 +23,5 @@ message Packet {
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;
-    simtime_t totalQueueingTime;
-    simtime_t totalServiceTime;
     simtime_t creationTime;
 }
