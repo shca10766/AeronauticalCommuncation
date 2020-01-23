@@ -22,12 +22,10 @@ simple ControlTower {
     parameters:
         // Signals for statistics
         @signal[endToEndDelay](type="simtime_t");
-        @signal[totalQueueingTime](type="simtime_t");
         @signal[totalServiceTime](type="simtime_t");
         
         // Statistics
         @statistic[endToEndDelay](title="end-to-end delay of arrived packets";unit=s;record=vector,mean,max;interpolationmode=none);
-        @statistic[totalQueueingTime](title="the total time spent in queues by arrived packets";unit=s;record=vector?,mean,max;interpolationmode=none);
         @statistic[totalServiceTime](title="the total time spent  by arrived packets";unit=s;record=vector?,mean,max;interpolationmode=none);
     gates:
         input inCT[];

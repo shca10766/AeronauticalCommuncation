@@ -13,7 +13,6 @@ class ControlTower : public cSimpleModule {
     private:
         // Signals for statistics
         simsignal_t endToEndDelaySignal;
-        simsignal_t totalQueueingTimeSignal;
         simsignal_t totalServiceTimeSignal;
 
     protected:

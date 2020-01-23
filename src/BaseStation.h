@@ -14,6 +14,7 @@ class BaseStation : public cSimpleModule {
         // signals
         simsignal_t queueLengthSignal;
         simsignal_t queueingTimeSignal;
+        simsignal_t servingTimeSignal;
         simsignal_t busySignal;
 
         // serviced packet

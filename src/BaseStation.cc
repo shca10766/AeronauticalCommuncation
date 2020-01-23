@@ -20,6 +20,7 @@ void BaseStation::initialize()
     // Statistics (signals)
     queueingTimeSignal = registerSignal("queueingTime");
     queueLengthSignal = registerSignal("queueLength");
+    servingTimeSignal = registerSignal("servingTime");
     emit(queueLengthSignal, 0);
     busySignal = registerSignal("busy");
     emit(busySignal, false);
@@ -124,6 +125,7 @@ simtime_t BaseStation::startService(Packet *packet)
         serviceTime = par("serviceTime").doubleValue();
         EV << "\nService time : " << serviceTime << " s";
     }
+    emit(servingTimeSignal, serviceTime);
     return serviceTime;
 }
 

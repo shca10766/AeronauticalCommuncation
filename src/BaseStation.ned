@@ -29,15 +29,15 @@ simple BaseStation {
         @display("i=block/queue;q=queue");
         
         // signals
-        @signal[dropped](type="long");
         @signal[queueLength](type="long");
         @signal[queueingTime](type="simtime_t");
+        @signal[servingTime](type="simtime_t");
         @signal[busy](type="bool");
         
         // statistics
-        @statistic[dropped](title="drop event";record=vector?,count;interpolationmode=none);
         @statistic[queueLength](title="queue length";record=vector,timeavg,max;interpolationmode=sample-hold);
         @statistic[queueingTime](title="queueing time at dequeue";record=vector?,mean,max;unit=s;interpolationmode=none);
+        @statistic[servingTime](title="service time";record=vector?,mean,max;unit=s;interpolationmode=none);
         @statistic[busy](title="server busy state";record=vector?,timeavg;interpolationmode=sample-hold);
 		
 		// characteristic of the queue
