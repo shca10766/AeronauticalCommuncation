@@ -87,9 +87,6 @@ void Aircraft::initialize() {
     // We connect to the first time to a BS
     connectionBS(x_arrival, y_arrival);
 
-    EV << "Arrival " << x_arrival << " !!!! " << y_arrival << endl;
-    EV << "Departure " << x_departure << " !!!! " << y_departure << endl;
-
     // We generate the first packet
     generatePacket();
     send(packet, "outAircraft");
@@ -142,16 +139,16 @@ bool Aircraft::connectionBS(double x, double y) {
     // when the aircraft is inside the Area
     else {
         cModule *new_BS_connect = nullptr;
-        if (x < 100 && y >= 100) { // when the aircraft is on the BS1 area
+        if (x < 100 && y >= 100) { // when the aircraft is on the BS3 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation3");
         }
-        else if (x >= 100 && y >= 100) {// when the aircraft is on the BS2 area
+        else if (x >= 100 && y >= 100) {// when the aircraft is on the BS4 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation4");
         }
-        else if (x < 100 && y < 100) {// when the aircraft is on the BS3 area
+        else if (x < 100 && y < 100) {// when the aircraft is on the BS1 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation1");
         }
-        else {// when the aircraft is on the BS4 area
+        else {// when the aircraft is on the BS2 area
             new_BS_connect = getParentModule() -> getSubmodule("baseStation2");
         }
         if (new_BS_connect != BS_connect) {
@@ -220,13 +217,8 @@ void Aircraft::getXPosition() {
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     // we compute the x coordinate of the Aircraft, using the slope, the simTime, the velocity and the x_arrival
     double difX = (v*(simTime().dbl() - par("startTime").doubleValue())*abs(a))/(sqrt(1+a*a));
-    if (x_departure < x_arrival) {
-        x = x_arrival - difX;
-    }
-    else {
-        x = x_arrival + difX;
-    }
-    EV << "x: " << x << endl;
+    if (x_departure < x_arrival) { x = x_arrival - difX; }
+    else { x = x_arrival + difX;}
 }
 
 void Aircraft::getYPosition() {
@@ -234,13 +226,8 @@ void Aircraft::getYPosition() {
     double a = (x_departure - x_arrival)/(y_departure - y_arrival);
     // we compute the y coordinate of the Aircraft, using the slope, the simTime and the velocity and the y_arrival
     double difY = (v*(simTime().dbl() - par("startTime").doubleValue()))/(sqrt(1+a*a));
-    if (y_departure < y_arrival) {
-        y = y_arrival - difY;
-    }
-    else {
-        y = y_arrival + difY;
-    }
-    EV << "y: " << y << endl;
+    if (y_departure < y_arrival) {y = y_arrival - difY;}
+    else {y = y_arrival + difY;}
 }
 
 void Aircraft::refreshDisplay() const {
