@@ -112,8 +112,9 @@ simtime_t BaseStation::startService(Packet *packet)
     packet->setTotalQueueingTime(packet->getTotalQueueingTime() + d);
     EV << "Starting service of " << packet->getName() << endl;
     packet->setTimestamp();
-    // s = T.d², T = 0.03
-    double serviceTime = 0.03*pow(packet->getDistance_AC_BS(),2);
+    // s = T.d² = T.(dBCAC²+h²), T = 0.001
+    double serviceTime = 0.001*(pow(packet->getDistance_AC_BS(),2)+139.24);
+    EV << "Service time : " << serviceTime << "distance : " << packet->getDistance_AC_BS();
     return serviceTime;
 }
 
