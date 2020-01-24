@@ -21,12 +21,18 @@ package aeronauticalcommunication;
 simple ControlTower {
     parameters:
         // Signals for statistics
-        @signal[endToEndDelay](type="simtime_t");
+        @signal[endToEndDelayB1](type="simtime_t");
+        @signal[endToEndDelayB2](type="simtime_t");
+        @signal[endToEndDelayB3](type="simtime_t");
+        @signal[endToEndDelayB4](type="simtime_t");
         @signal[serviceTime](type="simtime_t");
         
-        // Statistics
-        @statistic[endToEndDelay](title="end-to-end delay of arrived packets";unit=s;record=vector,timeavg,mean,min,max;interpolationmode=none);
-        @statistic[serviceTime](title="service time";record=vector,mean;unit=s;interpolationmode=none);
+        // Statistics -- we use remover repeat to do a warmup period filter
+        @statistic[endToEndDelayB1](title="end-to-end delay of arrived packets from B1";unit=s;record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=none);
+        @statistic[endToEndDelayB2](title="end-to-end delay of arrived packets from B2";unit=s;record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=none);
+        @statistic[endToEndDelayB3](title="end-to-end delay of arrived packets from B3";unit=s;record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=none);
+        @statistic[endToEndDelayB4](title="end-to-end delay of arrived packets from B4";unit=s;record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=none);
+        @statistic[serviceTime](title="service time";record=vector(removeRepeats),mean;unit=s;interpolationmode=none);
         
     gates:
         input inCT[];

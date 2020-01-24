@@ -12,7 +12,10 @@ using namespace omnetpp;
 class ControlTower : public cSimpleModule {
     private:
         // Signals for statistics
-        simsignal_t endToEndDelaySignal;
+        simsignal_t endToEndDelayB1Signal;
+        simsignal_t endToEndDelayB2Signal;
+        simsignal_t endToEndDelayB3Signal;
+        simsignal_t endToEndDelayB4Signal;
         simsignal_t serviceTimeSignal;
 
     protected:
