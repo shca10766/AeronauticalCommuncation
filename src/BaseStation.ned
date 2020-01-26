@@ -24,6 +24,7 @@ simple BaseStation {
         int x_BS;
         int y_BS;
         int M = default(100);
+        double T;
         
         // queue icon
         @display("i=block/queue;q=queue");
@@ -34,7 +35,7 @@ simple BaseStation {
         @signal[busy](type="bool");
         
         // statistics -- we use remover repeat to do a warmup period filter
-        @statistic[queueLength](title="queue length";record=vector(removeRepeats),timeavg,min,max;interpolationmode=sample-hold);
+        @statistic[queueLength](title="queue length";record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=sample-hold);
         @statistic[servingTime](title="service time";record=vector(removeRepeats),mean;unit=s;interpolationmode=none);
         @statistic[busy](title="server busy state";record=vector(removeRepeats),timeavg;interpolationmode=sample-hold);
 		

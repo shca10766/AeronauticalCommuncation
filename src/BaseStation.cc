@@ -112,7 +112,7 @@ simtime_t BaseStation::startService(Packet *packet)
     double serviceTime;
     //Scenario 1
     if(par("serviceTime").doubleValue() <= 0) {
-        serviceTime = 0.001*(pow(packet->getDistance_AC_BS(),2)+139.24);
+        serviceTime = par("T").doubleValue()*(pow(packet->getDistance_AC_BS(),2)+139.24);
         EV << "\nService time : " << serviceTime << " s distance : " << packet->getDistance_AC_BS() << " km";
     }
     //Scenario 2
