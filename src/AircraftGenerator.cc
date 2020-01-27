@@ -32,7 +32,9 @@ void AircraftGenerator::handleMessage(cMessage *msg) {
         // set up parameter "id"
         aircraft -> par("id") = aircraftCounter;
         aircraft -> par("k") = par("k_generator");
+        aircraft -> par("kmean") = par("kmean_generator");
         aircraft -> par("t") = par("t_generator");
+        aircraft -> par("randomAC") = randomAC_generator;
         double time = simTime().dbl();
         aircraft -> par("startTime") = time;
         aircraft -> finalizeParameters();

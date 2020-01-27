@@ -35,6 +35,8 @@ class Aircraft : public cSimpleModule {
         // Events
         cMessage *event_t;
         cMessage *event_k;
+
+        simsignal_t interKTimeSignal;
     protected:
         virtual void initialize();
         virtual bool connectionBS(double x, double y);

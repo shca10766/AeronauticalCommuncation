@@ -7,6 +7,7 @@ Define_Module(Aircraft);
 void Aircraft::initialize() {
     packet = nullptr;
     event_t = nullptr;
+    interKTimeSignal = registerSignal("interKTime");
 
     double random_init = uniform(0,1);
     double random_arrival = uniform(0,200);
@@ -94,11 +95,21 @@ void Aircraft::initialize() {
 
     // k periodicity : we send a packet to the BS each k seconds
     event_k = new cMessage("event_k");
-    scheduleAt(simTime().dbl() + par("k").doubleValue(), event_k);
+
+    double kValue;
+    if (par("k").doubleValue() != 0) { kValue = par("k").doubleValue(); }
+    else {
+        kValue = exponential(par("kmean").doubleValue());
+    }
+    scheduleAt(simTime().dbl() + kValue, event_k);
 
     // t periodicity : we do a handover operation each t seconds
     event_t = new cMessage("event_t");
     scheduleAt(simTime().dbl() + par("t").doubleValue(), event_t);
+
+    if(par("id").intValue() == par("randomAC").intValue()) {
+        emit(interKTimeSignal, kValue);
+    }
 }
 
 
@@ -122,11 +133,20 @@ void Aircraft::handleMessage(cMessage *msg) {
     // When the Aircraft receives a message for sending a packet to the BS
     else {
         // the self-message is scheduled to be sent after k seconds
-        scheduleAt(simTime().dbl() + par("k").doubleValue(), event_k);
+        double kValue;
+        if (par("k").doubleValue() != 0) { kValue = par("k").doubleValue(); }
+        else {
+            kValue = exponential(par("kmean").doubleValue());
+        }
+        scheduleAt(simTime().dbl() + kValue, event_k);
         // A/C generates a packet for BS
         generatePacket();
         send(packet, "outAircraft");
         packet = nullptr;
+
+        if(par("id").intValue() == par("randomAC").intValue()) {
+            emit(interKTimeSignal, kValue);
+        }
     }
 
 }

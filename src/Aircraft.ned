@@ -22,12 +22,18 @@ simple Aircraft {
     parameters:  
         double t;
         double k;     
+        double kmean;
         double startTime;
         int id; 
+        int randomAC;
         
         double xpos = default(0.0);
         double ypos = default(0.0);
         @display("p=$xpos,$ypos;b=5,5,rect,red,black,2");
+        
+        @signal[interKTime](type="double");
+        @statistic[interKTime](title="Interarrival time k";record=vector);
+       
     gates:
         output outAircraft;
 }
