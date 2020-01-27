@@ -5,6 +5,7 @@ Define_Module(ControlTower);
 
 void ControlTower::initialize()
 {
+    endToEndDelayBSsSignal = registerSignal("endToEndDelayBSs");
     endToEndDelayB1Signal = registerSignal("endToEndDelayB1");
     endToEndDelayB2Signal = registerSignal("endToEndDelayB2");
     endToEndDelayB3Signal = registerSignal("endToEndDelayB3");
@@ -16,7 +17,7 @@ void ControlTower::handleMessage(cMessage *msg)
 {
     Packet *packet = check_and_cast<Packet *>(msg);
     const char* nom_module = msg -> getSenderModule() -> getName();
-
+    emit(endToEndDelayBSsSignal, simTime() - packet -> getCreationTime());
     // gather statistics - end-to-end delay
     // from B1
     if(strcmp("baseStation1", nom_module ) == 0) {

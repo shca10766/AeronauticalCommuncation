@@ -21,6 +21,7 @@ package aeronauticalcommunication;
 simple ControlTower {
     parameters:
         // Signals for statistics
+        @signal[endToEndDelayBSs](type="simtime_t");
         @signal[endToEndDelayB1](type="simtime_t");
         @signal[endToEndDelayB2](type="simtime_t");
         @signal[endToEndDelayB3](type="simtime_t");
@@ -28,6 +29,7 @@ simple ControlTower {
         @signal[serviceTime](type="simtime_t");
         
         // Statistics -- we use remover repeat to do a warmup period filter
+        @statistic[endToEndDelayBSs](title="end-to-end delay of arrived packets from B1";unit=s;record=vector(removeRepeats),mean,min,max;interpolationmode=none);
         @statistic[endToEndDelayB1](title="end-to-end delay of arrived packets from B1";unit=s;record=vector(removeRepeats),mean,min,max;interpolationmode=none);
         @statistic[endToEndDelayB2](title="end-to-end delay of arrived packets from B2";unit=s;record=vector(removeRepeats),mean,min,max;interpolationmode=none);
         @statistic[endToEndDelayB3](title="end-to-end delay of arrived packets from B3";unit=s;record=vector(removeRepeats),mean,min,max;interpolationmode=none);
