@@ -20,8 +20,8 @@ package aeronauticalcommunication;
 //
 simple AircraftGenerator {
     parameters:
-        double k_generator;
-        double t_generator;
+        double k_generator @unit(s); // time between two generation of a packet for A/Cs
+        double t_generator @unit(s); // handover operation period
         volatile double interArrivalTime @unit(s); // time between generated Aircraft
         int nbAircraft = default(-1); // number of Aircraft to be generated (-1 means no limit)
         double startTime @unit(s) = default(interArrivalTime); // when the AircraftGenerator creates the first Aircraft

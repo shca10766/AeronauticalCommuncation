@@ -19,10 +19,8 @@ void BaseStation::initialize()
 {
     // Statistics (signals)
     queueLengthSignal = registerSignal("queueLength");
-    servingTimeSignal = registerSignal("servingTime");
+    serviceTimeSignal = registerSignal("serviceTime");
     emit(queueLengthSignal, 0);
-    busySignal = registerSignal("busy");
-    emit(busySignal, false);
 
     // Parameters of the queue of BS
     endServiceMsg = new cMessage("end-service");
@@ -39,7 +37,6 @@ void BaseStation::handleMessage(cMessage *msg)
         // when the queue is empty : we don't have another packet to service
         if (queue.isEmpty()) {
             packetServiced = nullptr;
-            emit(busySignal, false); // the queue is not busy anymore
         }
         // when the queue is not empty (at least one packet)
         else {
@@ -61,7 +58,6 @@ void BaseStation::handleMessage(cMessage *msg)
         if (!packetServiced) {
             // processor was idle
             packetServiced = packet;
-            emit(busySignal, true); // utilization statistics
             // we start to count the service time for the packet
             simtime_t serviceTime = startService(packetServiced);
             // we schedule a endServiceMsg after the service time
@@ -110,18 +106,10 @@ simtime_t BaseStation::startService(Packet *packet)
     packet->setTimestamp();
     // s = T.d² = T.(dBCAC²+h²), T = 0.001
     double serviceTime;
-    //Scenario 1
-    if(par("serviceTime").doubleValue() <= 0) {
-        serviceTime = par("T").doubleValue()*(pow(packet->getDistance_AC_BS(),2)+139.24);
-        EV << "\nService time : " << serviceTime << " s distance : " << packet->getDistance_AC_BS() << " km";
-    }
-    //Scenario 2
-    else {
-        serviceTime = par("serviceTime").doubleValue();
-        EV << "\nService time : " << serviceTime << " s";
-    }
+    serviceTime = par("T").doubleValue()*(pow(packet->getDistance_AC_BS(),2)+139.24);
+    EV << "\nService time : " << serviceTime << " s distance : " << packet->getDistance_AC_BS() << " km";
     packet->setServiceTime(serviceTime);
-    emit(servingTimeSignal, serviceTime);
+    emit(serviceTimeSignal, serviceTime);
     return serviceTime;
 }
 

@@ -12,7 +12,7 @@ void AircraftGenerator::initialize() {
 }
 
 void AircraftGenerator::handleMessage(cMessage *msg) {
-    ASSERT(msg->isSelfMessage());
+    ASSERT(msg -> isSelfMessage());
     int nbAircraft = par("nbAircraft");
     double stopTime = par("stopTime");
     if ((nbAircraft < 0 || nbAircraft > aircraftCounter) && (stopTime < 0 || stopTime > simTime().dbl())) {

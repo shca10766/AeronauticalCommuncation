@@ -31,20 +31,15 @@ simple BaseStation {
         
         // signals
         @signal[queueLength](type="long");
-        @signal[servingTime](type="simtime_t");
-        @signal[busy](type="bool");
+        @signal[serviceTime](type="simtime_t");
         
         // statistics -- we use remover repeat to do a warmup period filter
-        @statistic[queueLength](title="queue length";record=vector(removeRepeats),timeavg,mean,min,max;interpolationmode=sample-hold);
-        @statistic[servingTime](title="service time";record=vector(removeRepeats),mean;unit=s;interpolationmode=none);
-        @statistic[busy](title="server busy state";record=vector(removeRepeats),timeavg;interpolationmode=sample-hold);
-		
+        @statistic[queueLength](title="queue length";record=vector(removeRepeats),mean,min,max;interpolationmode=sample-hold);
+        @statistic[serviceTime](title="service time";record=vector(removeRepeats),mean;unit=s;interpolationmode=none);
+       
 		// characteristic of the queue
         int capacity = default(-1);    // unlimited queue
         bool fifo = default(true);     // works as a queue (fifo=true)
-        
-        // For Scenario 2 - = 0 when scenario 1
-        volatile double serviceTime @unit(s); // exponential
     gates:
         input inBS[];
         output outBS;
