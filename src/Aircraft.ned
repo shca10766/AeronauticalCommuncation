@@ -19,13 +19,9 @@ package aeronauticalcommunication;
 // TODO auto-generated type
 //
 simple Aircraft {
-    parameters:  
-        double t;
-        double k;     
-        double kmean;
+    parameters:
         double startTime;
         int id; 
-        int randomAC;
         
         double xpos = default(0.0);
         double ypos = default(0.0);

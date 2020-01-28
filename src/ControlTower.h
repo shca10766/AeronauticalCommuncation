@@ -18,6 +18,7 @@ class ControlTower : public cSimpleModule {
         simsignal_t endToEndDelayB3Signal;
         simsignal_t endToEndDelayB4Signal;
         simsignal_t serviceTimeSignal;
+        simsignal_t interKTimeSignal;
 
     protected:
         virtual void initialize();

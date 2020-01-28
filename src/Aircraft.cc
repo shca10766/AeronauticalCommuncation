@@ -7,7 +7,6 @@ Define_Module(Aircraft);
 void Aircraft::initialize() {
     packet = nullptr;
     event_t = nullptr;
-    interKTimeSignal = registerSignal("interKTime");
 
     double random_init = uniform(0,1);
     double random_arrival = uniform(0,200);
@@ -88,28 +87,20 @@ void Aircraft::initialize() {
     // We connect to the first time to a BS
     connectionBS(x_arrival, y_arrival);
 
-    // We generate the first packet
-    generatePacket();
-    send(packet, "outAircraft");
-    packet = nullptr;
-
     // k periodicity : we send a packet to the BS each k seconds
     event_k = new cMessage("event_k");
 
-    double kValue;
-    if (par("k").doubleValue() != 0) { kValue = par("k").doubleValue(); }
-    else {
-        kValue = exponential(par("kmean").doubleValue());
-    }
+    double kValue = getParentModule() -> par("k");
     scheduleAt(simTime().dbl() + kValue, event_k);
+
+    // We generate the first packet
+    generatePacket(kValue);
+    send(packet, "outAircraft");
+    packet = nullptr;
 
     // t periodicity : we do a handover operation each t seconds
     event_t = new cMessage("event_t");
-    scheduleAt(simTime().dbl() + par("t").doubleValue(), event_t);
-
-    if(par("id").intValue() == par("randomAC").intValue()) {
-        emit(interKTimeSignal, kValue);
-    }
+    scheduleAt(simTime().dbl() + getParentModule() -> par("t").doubleValue(), event_t);
 }
 
 
@@ -121,7 +112,7 @@ void Aircraft::handleMessage(cMessage *msg) {
         // We connect the Aircraft to the nearest BS
         if(connectionBS(x,y)){
             // the self-message is scheduled to be sent after t seconds
-            scheduleAt(simTime().dbl() + par("t").doubleValue(), event_t);
+            scheduleAt(simTime().dbl() + getParentModule() -> par("t").doubleValue(), event_t);
         // The Aircraft is not in the Area anymore
         }else{
             // destruction of the Aircraft module
@@ -133,20 +124,12 @@ void Aircraft::handleMessage(cMessage *msg) {
     // When the Aircraft receives a message for sending a packet to the BS
     else {
         // the self-message is scheduled to be sent after k seconds
-        double kValue;
-        if (par("k").doubleValue() != 0) { kValue = par("k").doubleValue(); }
-        else {
-            kValue = exponential(par("kmean").doubleValue());
-        }
+        double kValue = getParentModule() -> par("k");
         scheduleAt(simTime().dbl() + kValue, event_k);
         // A/C generates a packet for BS
-        generatePacket();
+        generatePacket(kValue);
         send(packet, "outAircraft");
         packet = nullptr;
-
-        if(par("id").intValue() == par("randomAC").intValue()) {
-            emit(interKTimeSignal, kValue);
-        }
     }
 
 }
@@ -203,13 +186,15 @@ bool Aircraft::connectionBS(double x, double y) {
     }
 }
 
-void Aircraft::generatePacket() {
+void Aircraft::generatePacket(double kValue) {
     // create a packet to be send
     packet = new Packet("packet");
 
     // write the id of the Aicraft and the BaseStation in the packet
     packet -> setId_aircraft(par("id"));
     packet -> setId_baseStation(BS_connect -> par("nBS").intValue());
+
+    packet -> setK(kValue);
 
     // compute the distance d between BS and A/C and retrieve A/C's coordinates
     distanceBS();

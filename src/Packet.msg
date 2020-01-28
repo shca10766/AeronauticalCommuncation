@@ -20,6 +20,7 @@ message Packet {
     int id_aircraft;
     int id_baseStation;
     int queueCount;
+    double k;
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;

@@ -11,6 +11,7 @@ void ControlTower::initialize()
     endToEndDelayB3Signal = registerSignal("endToEndDelayB3");
     endToEndDelayB4Signal = registerSignal("endToEndDelayB4");
     serviceTimeSignal = registerSignal("serviceTime");
+    interKTimeSignal = registerSignal("interKTime");
 }
 
 void ControlTower::handleMessage(cMessage *msg)
@@ -42,6 +43,7 @@ void ControlTower::handleMessage(cMessage *msg)
 
     // service time - to get the mean of Scenario 1 and use it in Scenario 2
     emit(serviceTimeSignal, packet -> getServiceTime());
+    emit(interKTimeSignal, packet -> getK());
 
     delete msg;
 }

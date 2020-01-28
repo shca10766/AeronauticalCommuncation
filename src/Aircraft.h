@@ -35,13 +35,11 @@ class Aircraft : public cSimpleModule {
         // Events
         cMessage *event_t;
         cMessage *event_k;
-
-        simsignal_t interKTimeSignal;
     protected:
         virtual void initialize();
         virtual bool connectionBS(double x, double y);
         virtual void distanceBS();
-        virtual void generatePacket();
+        virtual void generatePacket(double k);
         virtual void handleMessage(cMessage *msg);
         virtual void getXPosition();
         virtual void getYPosition();

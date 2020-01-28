@@ -29,6 +29,7 @@
  *     int id_aircraft;
  *     int id_baseStation;
  *     int queueCount;
+ *     double k;
  *     double x_aircraft;
  *     double y_aircraft;
  *     double distance_AC_BS;
@@ -43,6 +44,7 @@ class Packet : public ::omnetpp::cMessage
     int id_aircraft;
     int id_baseStation;
     int queueCount;
+    double k;
     double x_aircraft;
     double y_aircraft;
     double distance_AC_BS;
@@ -72,6 +74,8 @@ class Packet : public ::omnetpp::cMessage
     virtual void setId_baseStation(int id_baseStation);
     virtual int getQueueCount() const;
     virtual void setQueueCount(int queueCount);
+    virtual double getK() const;
+    virtual void setK(double k);
     virtual double getX_aircraft() const;
     virtual void setX_aircraft(double x_aircraft);
     virtual double getY_aircraft() const;

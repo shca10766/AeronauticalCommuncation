@@ -25,7 +25,8 @@ import aeronauticalcommunication.ControlTower;
 network Area
 {
     parameters:
-		double T_BS;
+        volatile double k @unit(s);
+        double t @unit(s);
         @display("bgb=200,200,grey;bgu=km;bgg=100,1,red");
     submodules:
         aircraftGenerator: AircraftGenerator {
@@ -36,7 +37,6 @@ network Area
                 nBS = 1;
                 x_BS = 50;
                 y_BS = 50;
-                T = T_BS;
                 @display("p=50,50");
         }
         baseStation2: BaseStation {
@@ -44,7 +44,6 @@ network Area
                 nBS = 2;
                 x_BS = 150;
                 y_BS = 50;
-                T = T_BS;
                 @display("p=150,50");
         }
         baseStation3: BaseStation {
@@ -52,7 +51,6 @@ network Area
                 nBS = 3;
                 x_BS = 50;
                 y_BS = 150;
-                T = T_BS;
                 @display("p=50,150");
         }
         baseStation4: BaseStation {
@@ -60,7 +58,6 @@ network Area
                 nBS = 4;
                 x_BS = 150;
                 y_BS = 150;
-                T = T_BS;
                 @display("p=150,150");
         }
         controlTower: ControlTower {

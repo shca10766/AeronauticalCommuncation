@@ -24,7 +24,7 @@ simple BaseStation {
         int x_BS;
         int y_BS;
         int M = default(100);
-        double T;
+        double T = 0.001;
         
         // queue icon
         @display("i=block/queue;q=queue");
